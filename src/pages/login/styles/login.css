@@ -1,0 +1,317 @@
+/* Importar fuente */
+@import url("https://fonts.googleapis.com/css2?family=Poppin347bc822s:ital,wght@1,300&display=swap");
+
+* {
+    box-sizing: border-box;
+}
+
+.recuperar-container {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px; /* Tamaño específico */
+    margin: 0 auto; /* Centrar horizontalmente */
+}
+
+.recuperar-container h4{
+    font-size: 18px ;
+    color: rgba(6, 52, 125, 0.95);
+}
+
+.login-base {
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: -20px 0 50px;
+    background-color: #f0f0f0;
+
+}
+
+.top-left-button {
+    position: absolute;
+    top: 20px; /* Ajusta esta propiedad según sea necesario */
+    left: 20px; /* Ajusta esta propiedad según sea necesario */
+  }
+  
+  .button {
+    /* Estilos para tu botón */
+    padding: 10px 20px;
+    background-color:none;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+
+.login-base.recuperar h1{
+    color: #f2f2f2;
+    font-size: 30px;
+  }
+  
+  
+
+h1 {
+    font-weight: bold;
+    margin: 0;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+}
+
+span {
+    font-size: 12px;
+}
+
+a {
+    color: #228be6;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+}
+
+#red {
+    color: red;
+}
+
+.input-field::placeholder {
+    font-family: "Poppins", sans-serif;
+}
+
+
+.container-login {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0, 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+}
+
+.form-container-login form {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 5px; 
+}
+
+.form-container-login.sign-in-container-login h1 {
+    color: #2873ea;
+}
+
+.form-container-login.sign-up-container-login h1 {
+    color: rgba(6, 52, 125, 0.95);
+    margin-top: -10px; /* Ajusta según sea necesario */
+    margin-bottom: 10px; 
+
+}
+
+.form-container-login input {
+    background:  #347bc822;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.recuperar-container input {
+    background:  #347bc822;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+}
+
+button {
+    border-radius: 20px;
+    border: 1px solid #228be6;
+    background:#2873ea;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+}
+
+.button.registrar-button {
+    border: 1px solid rgba(6, 52, 125, 0.95);
+    background: rgba(6, 52, 125, 0.95);
+}
+
+
+
+button:active {
+    transform: scale(0.95);
+}
+
+button:focus {
+    outline: none;
+}
+
+button.ghost {
+    background: transparent;
+    border-color: #fff;
+    
+}
+
+.forgot-password-link {
+    color: #228be6;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+}
+
+.container-login .form-container-login {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.container-login .sign-in-container-login {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container-login .sign-up-container-login {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container-login .overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.overlay {
+    background: rgba(6,28,64,0.75);
+    background: linear-gradient(to right, #2873ea,rgba(9,39,87,0.95)) no-repeat 0 0 / cover;
+    color: #fff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: tranform 0.6s ease-in-out;
+}
+
+.overlay-panel {
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 40px;
+    height: 100%;
+    width: 50%;
+    text-align: center;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.overlay-left {
+    background:#2873ea ;
+    background: linear-gradient(to right, #2873ea,rgba(9,39,87,0.95)) no-repeat 0 0 / cover;
+    position: relative;
+    left: -75%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: tranform 0.6s ease-in-out;
+}
+
+/* Animación */
+
+.container-login.right-panel-active .sign-in-container-login {
+    transform: translateX(100%);
+
+}
+
+.container-login.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+
+}
+
+.container-login.right-panel-active .sign-up-container-login {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+}
+
+.container-login.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.container-login.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.container-login.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+.top-right-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+}
+
+.google-btn {
+    background-color: #4285F4; /* Color del botón de Google */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .google-btn:hover {
+    background-color: #357ae8; /* Color del botón cuando se pasa el ratón por encima */
+  }
+  

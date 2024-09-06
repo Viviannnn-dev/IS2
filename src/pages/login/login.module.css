@@ -1,0 +1,236 @@
+/* Importar fuente */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,300&display=swap");
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(45deg, rgba(20, 99, 155, 0.25), rgba(30, 148, 227, 0.25)), url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1560%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='url(%23SvgjsRadialGradient1561)'%3e%3c/rect%3e%3cpath d='M0 0L52.91 0L0 5.82z' fill='rgba(255%2c 255%2c 255%2c .1)'%3e%3c/path%3e%3cpath d='M0 5.82L52.91 0L223.41 0L0 198.10999999999999z' fill='rgba(255%2c 255%2c 255%2c .075)'%3e%3c/path%3e%3cpath d='M0 198.10999999999999L223.41 0L876.5699999999999 0L0 320.44z' fill='rgba(255%2c 255%2c 255%2c .05)'%3e%3c/path%3e%3cpath d='M0 320.44L876.5699999999999 0L1264.6799999999998 0L0 414.01z' fill='rgba(255%2c 255%2c 255%2c .025)'%3e%3c/path%3e%3cpath d='M1440 560L1266.7 560L1440 289.19z' fill='rgba(0%2c 0%2c 0%2c .1)'%3e%3c/path%3e%3cpath d='M1440 289.19L1266.7 560L701.63 560L1440 233.49z' fill='rgba(0%2c 0%2c 0%2c .075)'%3e%3c/path%3e%3cpath d='M1440 233.49L701.6299999999999 560L375.40999999999985 560L1440 115.81z' fill='rgba(0%2c 0%2c 0%2c .05)'%3e%3c/path%3e%3cpath d='M1440 115.81L375.40999999999985 560L223.58999999999986 560L1440 34.019999999999996z' fill='rgba(0%2c 0%2c 0%2c .025)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1560'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cradialGradient cx='100%25' cy='100%25' r='1545.06' gradientUnits='userSpaceOnUse' id='SvgjsRadialGradient1561'%3e%3cstop stop-color='rgba(9%2c 82%2c 158%2c 1)' offset='1'%3e%3c/stop%3e%3cstop stop-color='rgba(0%2c 69%2c 158%2c 0)' offset='1'%3e%3c/stop%3e%3c/radialGradient%3e%3c/defs%3e%3c/svg%3e");
+    background-size: cover;
+    background-attachment: fixed;
+    background-blend-mode: multiply;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: -20px 0 50px;
+}
+
+h1 {
+    font-weight: bold;
+    margin: 0;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+}
+
+span {
+    font-size: 12px;
+}
+
+a {
+    color: #228be6;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+}
+
+#red {
+    color: red;
+}
+
+.input-field::placeholder {
+    font-family: "Poppins", sans-serif;
+}
+
+
+.container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0, 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+}
+
+.form-container form {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.form-container.sign-in-container h1 {
+    color: #2873ea; /* Cambia #ff0000 por el color que desees */
+}
+
+.form-container.sign-up-container h1 {
+    color: rgba(6, 52, 125, 0.95)
+}
+
+.form-container input {
+    background: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+}
+
+button {
+    border-radius: 20px;
+    border: 1px solid #228be6;
+    background:#2873ea;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+}
+
+.form-container.sign-up-container button {
+    border: 1px solid rgba(6, 52, 125, 0.95);
+    background: rgba(6, 52, 125, 0.95);
+}
+
+
+
+button:active {
+    transform: scale(0.95);
+}
+
+button:focus {
+    outline: none;
+}
+
+button.ghost {
+    background: transparent;
+    border-color: #fff;
+    
+}
+
+.forgot-password-link {
+    color: #228be6;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+}
+
+.container .form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.container .sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container .sign-up-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container .overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.overlay {
+    background: rgba(6,28,64,0.75);
+    background: linear-gradient(to right, #2873ea,rgba(9,39,87,0.95)) no-repeat 0 0 / cover;
+    color: #fff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: tranform 0.6s ease-in-out;
+}
+
+.overlay-panel {
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 40px;
+    height: 100%;
+    width: 50%;
+    text-align: center;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.overlay-left {
+    background:#2873ea ;
+    background: linear-gradient(to right, #2873ea,rgba(9,39,87,0.95)) no-repeat 0 0 / cover;
+    position: relative;
+    left: -75%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: tranform 0.6s ease-in-out;
+}
+
+/* Animación */
+
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+
+}
+
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+
+}
+
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
