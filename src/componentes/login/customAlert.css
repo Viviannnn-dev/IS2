@@ -1,0 +1,20 @@
+
+  .custom-alert {
+    position: relative; /* Importante para usar top */
+    top: -320px; /* Ajusta el valor según sea necesario para mover el alerta hacia arriba */
+  }  
+
+  .alert-heading-custom{
+    font-size: 15px !important;
+  }
+
+  .login-custom-alert-container .custom-alert {
+    /* Estilos específicos para el CustomAlert dentro del componente Login */
+    position: absolute; /* Importante para usar top */
+    top: 10px; /* Ajusta la posición según sea necesario */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%; /* Ajusta el ancho del alert según sea necesario */
+    margin: 0 auto; /* Centra el alert horizontalmente */
+  }
+  
