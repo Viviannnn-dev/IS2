@@ -1,0 +1,44 @@
+/* Sidebar.css */
+/* Sidebar.css */
+.sidebar {
+    background-color: #333; /* Color de fondo oscuro */
+    color: #fff; /* Color de texto blanco */
+    height: 100vh; /* Altura completa para llenar la pantalla */
+    overflow-y: auto; /* Agrega scroll si el contenido excede la altura */
+    display: flex;
+    flex-direction: column;
+    border: none;
+  }
+  
+  
+  .add-board {
+    display: flex; /* Alineación horizontal */
+    align-items: center; /* Alinea verticalmente al centro */
+  }
+  
+  .board-label {
+    margin-right: 10px; /* Espacio entre el texto y el botón */
+    font-size: 16px; /* Tamaño de la fuente */
+    text-align: left !important;
+    width: 150px;
+    padding: 10px;
+  }
+  
+  .add-board-button {
+    background-color: #007bff; /* Color de fondo del botón (azul) */
+    border: none; /* Sin borde */
+    color: white; /* Color del texto del botón */
+    padding: 10px; /* Espaciado interno */
+    margin: 10px 0; /* Margen vertical */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    border-radius: 5px; /* Esquinas redondeadas */
+    flex-shrink: 0; /* Evita que el botón se encoja en el contenedor flex */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+  
+  }
+  
+  /* Efecto de hover */
+  .add-board-button:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+  }
+  

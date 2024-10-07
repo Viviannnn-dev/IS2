@@ -1,0 +1,36 @@
+.home-container {
+    display: grid;
+    height: 100vh;
+  }
+  
+  .board-area {
+    background: linear-gradient(to right, #2872eae8, rgba(9, 39, 87, 0.822)) no-repeat 0 0 / cover;
+    padding: 20px;
+  }
+  
+  .add-board-form-container {
+    width: 250px; /* Ajusta el ancho del formulario */
+    height: auto; /* Ajusta la altura según el contenido */
+    padding: 10px;
+    background-color: #242323; /* Fondo para distinguirlo */
+    position: absolute; /* Cambiar a posición absoluta para mayor control */
+    top: 10px; /* Posicionarlo verticalmente con respecto al contenedor */
+    border-radius: 10px;
+  }
+
+  .board-color {
+    background: linear-gradient(to right, #326cc9ad,rgb(42, 116, 255)) no-repeat 0 0 / cover ;   
+  }
+
+.board-header{
+  color: #333333;
+  font-weight: bold;
+  font-size: 16px; /* Tamaño de la fuente */
+  height: 50px;
+  margin: -12px;
+  padding: 5px 20px;
+  display: flex;
+  align-items: flex-start; /* Alinea el texto en la parte superior */
+  border-bottom: 2px solid rgba(204, 204, 204, 0.801);
+}
+

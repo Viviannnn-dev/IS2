@@ -24,6 +24,13 @@
   color: white;
 }
 
+.App {
+  text-align: center;
+  background-color: red; /* Cambia el color de fondo de toda la App */
+  width: 100%;
+}
+  
+
 .App-link {
   color: #61dafb;
 }
@@ -35,4 +42,27 @@
   to {
     transform: rotate(360deg);
   }
+}
+/* Ocultar la barra de desplazamiento para todo el proyecto */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
+}
+
+/* Ocultar la barra de desplazamiento en navegadores basados en WebKit (Chrome, Safari) */
+*::-webkit-scrollbar {
+  display: none; /* Oculta la barra de desplazamiento */
+}
+
+/* Permitir desplazamiento sin mostrar la barra */
+html {
+  overflow: auto; /* Permitir desplazamiento */
+}
+
+/* Para el cuerpo de la aplicación */
+body {
+  overflow-y: scroll; /* Permitir desplazamiento vertical */
+  overflow-x: hidden; /* Ocultar desplazamiento horizontal */
+  height: 100%; /* Asegúrate de que ocupe toda la altura */
+  margin: 0; /* Elimina márgenes predeterminados */
 }

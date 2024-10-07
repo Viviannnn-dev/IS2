@@ -1,0 +1,156 @@
+.cards {
+    margin-bottom: 5px;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    margin: 5px 0;
+    background-color: rgba(255, 255, 255, 0.801);
+    border: none;
+    height: 30px;
+    border-radius: var(--bs-border-radius);
+}
+
+.lists {
+    display: flex; 
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.list {
+    margin: 10px;
+    padding: 10px;
+    background-color: #333333a2;
+    border: none;
+    border-radius: 10px;
+    width: 250px;
+    height: auto;
+    max-height: auto;
+    flex-shrink: 0;
+    flex-grow: 0; 
+    position: relative;
+}
+
+.board {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: none;   
+    width: 100%; 
+    margin-left: auto; 
+    margin-right: 0; 
+    margin: none;
+}
+
+.board-label {
+    color: rgba(240, 248, 255, 0.678);
+    text-align: center; 
+    display: block; 
+}
+
+.form-card {
+    background-color: #333333a2; 
+    color: #ddd; 
+    padding: 10px; 
+    text-align: left;
+    font-size: 16px; 
+    border: none; 
+    border-radius: 10px; 
+    width: 100%;
+}
+
+.form-card:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.form-card::placeholder {
+    color: #999; 
+}
+
+.form-card:hover {
+    background-color: rgba(204, 204, 204, 0.1); 
+}
+
+.form-list {
+    background-color: rgba(255, 255, 255, 0); 
+    color: #333; 
+    padding: 10px; 
+    text-align: left;
+    font-size: 16px; 
+    border: none; 
+    border-radius: 10px; 
+    width: 100%;
+    margin-bottom: 1px;
+}
+
+.form-list:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.form-list::placeholder {
+    color: #333; 
+}
+
+.lists-container {
+    overflow-x: auto; 
+    width: 100%; 
+    padding: 10px 0; 
+    white-space: nowrap;
+}
+
+.add-list-container {
+    justify-content: center;
+    margin: 10px 10px 10px 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.801);
+    border-radius: 10px;
+    width: 250px;
+    height: 50px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+}
+
+.add-list-container:hover {
+    background-color: rgba(255, 255, 255, 0.918) !important; 
+}
+
+.list-name-input {
+    border: none; 
+    outline: none; 
+    box-shadow: none; 
+    background: transparent; 
+    font-size: 16px; 
+    width: 100%; 
+    color: #ddd;
+}
+
+.delete-list-button {
+    position: absolute; 
+    top: 5px; 
+    right: 5px; 
+    background: none; 
+    border: none; 
+    cursor: pointer;
+    font-size: 12px; 
+    padding: 2px; 
+    margin: 0;
+    color: #888; 
+    transition: color 0.3s ease;
+}
+
+.delete-list-button:hover {
+    color: #e74c3c; 
+}
+
+.delete-list-button:focus {
+    outline: none; 
+}
