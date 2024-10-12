@@ -1,0 +1,15 @@
+.modal-body-custom{
+    background-color: #dddddd76;
+}
+
+.modal-title-custom {
+    text-align: center; /* Centra el texto */
+    width: 100%; /* Asegúrate de que ocupe todo el ancho */
+}
+  
+.button-container {
+    display: flex; /* Habilita flexbox */
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+    gap: 10px; /* Espacio entre los botones */
+    margin-top: 1rem; /* Espacio superior opcional */
+}
