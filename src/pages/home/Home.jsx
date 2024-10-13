@@ -4,7 +4,7 @@ import Sidebar from '../../componentes/home/Sidebar';
 import AddBoardForm from '../../componentes/forms/AddBoardForm';
 import Board from '../../componentes/home/Board';
 
-const Home = () => {
+const Home = ({user}) => {
   const [showForm, setShowForm] = useState(false);
   const [boards, setBoards] = useState([]);
 
