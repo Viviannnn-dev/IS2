@@ -8,7 +8,23 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
     const [selectedColor, setSelectedColor] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [tasks, setTasks] = useState([]);
+    const [showTasks, setShowTasks] = useState(false); // Estado para controlar la visibilidad de la lista de tareas
     
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    
+    const yesterday = new Date();
+    yesterday.setHours(0,0, 0, 0, 0);
+    yesterday.setDate(currentDate.getDate() - 1);
+
+    function areDatesEqual(date1, date2) {
+        console.log(date1);
+        console.log(date2);
+        return date1.toDateString() === date2.toDateString();
+    }
+    
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [formDataTask, setFormDataTask] = useState({
         name: '',
         description: '',
@@ -16,7 +32,10 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
         dueDate: new Date().toISOString().split('T')[0]    });
 
     const handleShowModal = () => setShowModal(true);
-    const handleCloseModal = () => setShowModal(false);
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setShowTasks(false); // Limpiar la visibilidad de la lista de tareas al cerrar el modal
+    };
 
     const handleChangeTask = (e) => {
         const { name, value } = e.target;
@@ -24,12 +43,24 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
             ...prevData,
             [name]: value
         }));
+
+        setErrorMessage('');
+    };
+
+    const handleShowTasks = () => {
+        setShowTasks(!showTasks); // Alternar la visibilidad de la lista de tareas
     };
 
     const handleSaveTask = () => {
+        // Verificar que ningún campo esté vacío
+        if (!formDataTask.name || !formDataTask.description || !formDataTask.status || !formDataTask.dueDate) {
+            setErrorMessage('Por favor, complete todos los campos.');
+            return; // Detener la ejecución si hay campos vacíos
+        }
+        handleCloseModal();
         setTasks([...tasks, formDataTask]);
         setFormDataTask({ description: '', status: 'open', dueDate: '' });
-        handleCloseModal();
+        
     };
     
     const [formData, setFormData] = useState({
@@ -163,24 +194,71 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
                         </Form.Select>
                     </Form.Group>
                     <div>
-            <Button className="button-task" onClick={handleShowModal}>Tarea</Button>
-            {tasks.map((task, index) => (
-                <div key={index}>
-                    <p>Tarea {index+1}: {task.description}</p>
-                    <p>Descripción: {task.description}</p>
-                    <p>Estado: {task.status}</p>
-                    <p>Fecha de Vencimiento: {task.dueDate}</p>
-                    <hr />
+            <Button className="button-task" onClick={handleShowModal}>Añadir Tarea</Button>
+            
+            <Button className="button-task" onClick={handleShowTasks}>
+                {showTasks ? 'Ocultar Tareas' : 'Listar Tareas'}
+            </Button>
+
+        <div className="task">
+            {showTasks && (
+                <div className="task-list">
+                    {tasks.length === 0 ? (
+                        <p>No existen tareas.</p>
+                    ) : (
+                        tasks.map((task, index) => {
+                            // Convertir la fecha de vencimiento a un objeto Date
+                            const [year, month, day] = task.dueDate.split('-').map(Number);
+                            const dueDate = new Date(year, month - 1, day); // Crea la fecha en medianoche local
+                            
+
+                            console.log(task.dueDate)
+
+
+                            // Determinar la clase según la fecha de vencimiento
+                            let taskClass = 'task-item'; // Clase base
+
+                            // Asignar la clase "atrasada" o "vencido"
+                            if ( areDatesEqual(dueDate, currentDate) || areDatesEqual(dueDate,yesterday)) {
+                                taskClass = 'late'; // Si la fecha es hoy o ayer
+                            } else if(dueDate<currentDate){
+                                taskClass= 'defeated';
+                            }
+
+                            return (
+                                <div key={index} className={taskClass}>
+                                    <p>Nombre: {task.name}</p>
+                                    <p>Descripción: {task.description}</p>
+                                    <p>Estado: {task.status}</p>
+                                    <p>Fecha de Vencimiento: {task.dueDate}</p>
+                                </div>
+                            );
+                        })
+                    )}
                 </div>
-            ))}
+            )}
+        </div>
+        <div class="color-box">
+            <span class="box-late"></span>
+            <span class="label">Atrasado</span>
+        </div>
+        <div class="color-box">
+            <span class="box-defeated"></span>
+            <span class="label">Vencido</span>
+        </div>
+
+
+
 
             <Modal className='modal-task' show={showModal} onHide={handleCloseModal}>
                 <Modal.Header className='modal-header-task' closeButton>
                     <Modal.Title className=''>Añadir Tarea</Modal.Title>
                 </Modal.Header>
                 <Modal.Body >
+                {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+
                     <Form>
-                    <Form.Group controlId="name" className="mb-0 custom-margin mt-0">
+                    <Form.Group controlId="name" className="mb-0 mt-0">
                             <Form.Label>Nombre</Form.Label>
                             <Form.Control
                                 type="text"

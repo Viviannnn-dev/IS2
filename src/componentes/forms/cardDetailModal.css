@@ -19,7 +19,8 @@
     border: none !important;
     color:  #212529 !important;
     padding: 0px !important;
-
+    display: block !important;
+    margin-bottom: 10px;
 }
 
 .modal-header-task{
@@ -40,7 +41,7 @@
 
 .modal-title{
     font-size: 15px !important;
-    color: #ddd !important;
+    color: #333 !important;
 }
 
 .modal-task .footer-task{
@@ -62,3 +63,65 @@
     margin-top: 0%;
 }
 
+.task-list {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+    justify-content: space-between; /* Espacia los elementos en la línea */
+}
+
+.task-item {
+    width: 48%; /* Ocupar aproximadamente la mitad del contenedor */
+    margin-bottom: 20px; /* Espacio entre las filas */
+    border: 1px solid #ccc; /* Añadir borde opcional para ver los límites de cada tarea */
+    padding: 10px; /* Espacio interno en cada tarea */
+    box-sizing: border-box; /* Asegúrate de que el padding y el border no afecten el ancho */
+    background-color: #3333331b !important;
+    border-radius: 10px;
+}
+
+.task-item p, .late p, .defeated p {
+    font-size: 12.5px;
+    line-height: 1;
+}
+
+.late {
+    width: 48%; 
+    background-color: #cd87b257 !important; /* Color de fondo para tareas atrasadas */
+    padding: 10px; /* Espaciado interno */
+    margin-bottom: 20px; /* Espaciado entre tareas */
+    box-sizing: border-box; 
+    border-radius: 10px;
+}
+
+.defeated {
+    width: 48%; 
+    background-color: #e17272; /* Color de fondo para tareas no atrasadas */
+    color: #fdfdfd; /* Color de texto para tareas no atrasadas */
+    padding: 10px; /* Espaciado interno */
+    margin-bottom: 20px; /* Espaciado entre tareas */
+    box-sizing: border-box; 
+    border-radius: 10px;
+}
+
+.color-box {
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+}
+
+.box-late {
+    width: 10px; /* Ajusta el tamaño del cuadrado */
+    height: 10px; /* Ajusta el tamaño del cuadrado */
+    background-color: #cd87b257; /* Cambia el color aquí */
+    margin-right: 5px; /* Espacio entre el cuadrado y la palabra */
+}
+
+.box-defeated {
+    width: 10px; /* Ajusta el tamaño del cuadrado */
+    height: 10px; /* Ajusta el tamaño del cuadrado */
+    background-color: #e17272; /* Cambia el color aquí */
+    margin-right: 5px; /* Espacio entre el cuadrado y la palabra */
+}
+
+.label {
+    font-size: 14px; /* Ajusta el tamaño de la palabra */
+}
