@@ -13,3 +13,52 @@
     gap: 10px; /* Espacio entre los botones */
     margin-top: 1rem; /* Espacio superior opcional */
 }
+
+.button-task{
+    background: none !important;
+    border: none !important;
+    color:  #212529 !important;
+    padding: 0px !important;
+
+}
+
+.modal-header-task{
+    height: 30px;
+    background-color: #333 ;
+    font-size: 5px;
+
+}
+
+.modal-task .modal-body{
+    background-color: #333;
+}
+
+.modal-task{
+    height: 400px !important;
+    font-size: 13px !important;
+}
+
+.modal-title{
+    font-size: 15px !important;
+    color: #ddd !important;
+}
+
+.modal-task .footer-task{
+    height: 10;
+    background-color: #333;
+}
+
+.modal-task .custom-margin{
+    margin-top: -14px !important;
+}
+
+.modal-task .form-label{
+    color: rgba(240, 248, 255, 0.678) !important;
+}
+
+.modal-task .modal-content{
+    margin: 0 auto;
+    width: 80%;
+    margin-top: 0%;
+}
+

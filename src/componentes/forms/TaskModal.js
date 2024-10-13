@@ -4,34 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './cardDetailModal.css';
 
-const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
+const TaskModal = ({ show, onHide, card, onSave, lists }) => {
     const [selectedColor, setSelectedColor] = useState('');
-    const [showModal, setShowModal] = useState(false);
-    const [tasks, setTasks] = useState([]);
-    
-    const [formDataTask, setFormDataTask] = useState({
-        name: '',
-        description: '',
-        status: 'open',
-        dueDate: new Date().toISOString().split('T')[0]    });
 
-    const handleShowModal = () => setShowModal(true);
-    const handleCloseModal = () => setShowModal(false);
-
-    const handleChangeTask = (e) => {
-        const { name, value } = e.target;
-        setFormDataTask((prevData) => ({
-            ...prevData,
-            [name]: value
-        }));
-    };
-
-    const handleSaveTask = () => {
-        setTasks([...tasks, formDataTask]);
-        setFormDataTask({ description: '', status: 'open', dueDate: '' });
-        handleCloseModal();
-    };
-    
     const [formData, setFormData] = useState({
         name: '', // Nombre de la actividad
         description: '', // Descripción
@@ -162,80 +137,8 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
                             ))}
                         </Form.Select>
                     </Form.Group>
-                    <div>
-            <Button className="button-task" onClick={handleShowModal}>Tarea</Button>
-            {tasks.map((task, index) => (
-                <div key={index}>
-                    <p>Tarea {index+1}: {task.description}</p>
-                    <p>Descripción: {task.description}</p>
-                    <p>Estado: {task.status}</p>
-                    <p>Fecha de Vencimiento: {task.dueDate}</p>
-                    <hr />
-                </div>
-            ))}
-
-            <Modal className='modal-task' show={showModal} onHide={handleCloseModal}>
-                <Modal.Header className='modal-header-task' closeButton>
-                    <Modal.Title className=''>Añadir Tarea</Modal.Title>
-                </Modal.Header>
-                <Modal.Body >
-                    <Form>
-                    <Form.Group controlId="name" className="mb-0 custom-margin mt-0">
-                            <Form.Label>Nombre</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="name"
-                                value={formDataTask.name}
-                                onChange={handleChangeTask}
-                                className="form-control-sm"
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="descripcion" className="mb-0">
-                            <Form.Label>Descripción</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="description"
-                                value={formDataTask.description}
-                                onChange={handleChangeTask}
-                                className="form-control-sm"
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="estado" className="mb-0">
-                            <Form.Label>Estado</Form.Label>
-                            <Form.Select
-                                name="status"
-                                value={formDataTask.status}
-                                onChange={handleChangeTask}
-                                className="form-select-sm"
-                            >
-                                <option value="open">Open</option>
-                                <option value="closed">Closed</option>
-                            </Form.Select>
-                        </Form.Group>
-                        <Form.Group controlId="vencimiento" className="mb-0">
-                            <Form.Label>Fecha de Vencimiento</Form.Label>
-                            <Form.Control
-                                type="date"
-                                name="dueDate"
-                                value={formDataTask.dueDate}
-                                onChange={handleChangeTask}
-                                className="form-control-sm"
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer className ="footer-task">
-                    <Button variant="secondary" onClick={handleCloseModal} className='btn-sm'>
-                        Cancelar
-                    </Button>
-                    <Button variant="primary" onClick={handleSaveTask} className='btn-sm'>
-                        Guardar
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
                     <div className="button-container">
-                        <Button variant="secondary" onClick={onHide} className="mr-0">
+                        <Button variant="secondary" onClick={onHide} className="mr-2">
                             Cancelar
                         </Button>
                         <Button variant="primary" type="submit">
