@@ -1,0 +1,11 @@
+[
+  {
+    "model": "tasks.task",
+    "pk": 1,
+    "fields": {
+      "title": "Tarea 1",
+      "description": "Descripción de la tarea 1",
+      "owner": 1
+    }
+  }
+]
