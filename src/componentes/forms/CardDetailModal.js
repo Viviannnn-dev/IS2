@@ -1,12 +1,12 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Accordion from 'react-bootstrap/Accordion';
-
 import './cardDetailModal.css';
 
 const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
+    const [selectedColor, setSelectedColor] = useState('');
+
     const [formData, setFormData] = useState({
         name: '', // Nombre de la actividad
         description: '', // Descripción
@@ -33,16 +33,31 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value, // Actualiza el campo correspondiente
-        }));
+
+        // Verifica si el campo es 'label' para manejar el color
+        if (name === 'label') {
+            setSelectedColor(value); // Actualiza el color seleccionado
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value, // Actualiza el campo correspondiente
+            }));
+        } else {
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value, // Actualiza el campo correspondiente
+            }));
+        }
     };
 
     const handleSave = (e) => {
         e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
         onSave({ ...formData, id: card.id }); // Pasar el objeto completo a onSave, incluyendo el ID de la tarjeta para la actualización
         onHide(); // Cerrar el modal
+    };
+
+    const selectStyle = {
+        backgroundColor: selectedColor || 'white',
+        color: selectedColor ? 'black' : 'black',
     };
 
     return (
@@ -57,53 +72,59 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
                         <Form.Control
                             type="text"
                             className="form-control-sm"
-                            name="name" // Añadir nombre
+                            name="name"
                             value={formData.name}
                             onChange={handleChange}
                         />
                     </Form.Group>
-                    <Form.Group className="mb-2 " controlId="descripcion">
+                    <Form.Group className="mb-2" controlId="descripcion">
                         <Form.Label>Descripción</Form.Label>
                         <Form.Control
                             type="text"
                             className="form-control-sm"
-                            name="description" // Añadir nombre
+                            name="description"
                             value={formData.description}
                             onChange={handleChange}
                         />
                     </Form.Group>
-                    <Form.Group className="mb-2 " controlId="fechavencimiento">
+                    <Form.Group className="mb-2" controlId="fechavencimiento">
                         <Form.Label>Fecha de Vencimiento</Form.Label>
                         <Form.Control
-                             type="date" // Cambiar a tipo date para mejor selección
-                             className="form-control-sm"
-                             name="dueDate" // Añadir nombre
-                             value={formData.dueDate}
-                             onChange={handleChange}
+                            type="date"
+                            className="form-control-sm"
+                            name="dueDate"
+                            value={formData.dueDate}
+                            onChange={handleChange}
                         />
                     </Form.Group>
-                    <Form.Group className="mb-2 " controlId="usuario">
+                    <Form.Group className="mb-2" controlId="usuario">
                         <Form.Label>Usuario Asignado</Form.Label>
-                        <Form.Control
-                           type="text"
-                           className="form-control-sm"
-                           name="assignedUser" // Añadir nombre
-                           value={formData.assignedUser}
-                           onChange={handleChange}
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-2 " controlId="etiqueta">
-                        <Form.Label>Etiqueta</Form.Label>
                         <Form.Control
                             type="text"
                             className="form-control-sm"
-                            
+                            name="assignedUser"
+                            value={formData.assignedUser}
+                            onChange={handleChange}
                         />
+                    </Form.Group>
+                    <Form.Group className="mb-2" controlId="etiqueta">
+                        <Form.Label>Etiqueta</Form.Label>
+                        <Form.Select
+                            style={selectStyle}
+                            name="label" // Añadir nombre aquí
+                            value={selectedColor} // Mantiene el color seleccionado
+                            onChange={handleChange}>
+                            <option value="" style={{ backgroundColor: 'white', color: 'black'}}>Seleccione una opción</option>
+                            <option value="#ffb3d9" style={{ backgroundColor: "#ffb3d9"}}></option>
+                            <option value="#add8e6" style={{ backgroundColor: "#add8e6"}}></option>
+                            <option value="#b2e2b2" style={{ backgroundColor: "#b2e2b2"}}></option>
+                            <option value="#ffcc99" style={{ backgroundColor: "#ffcc99"}}></option>
+                        </Form.Select>
                     </Form.Group>
                     <Form.Group className="mb-2" controlId="estado">
                         <Form.Label>Estado</Form.Label>
                         <Form.Select
-                            name="selectedList" // Añadir nombre
+                            name="selectedList"
                             value={formData.selectedList}
                             onChange={handleChange}
                             className="form-control-sm"
@@ -116,7 +137,7 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
                             ))}
                         </Form.Select>
                     </Form.Group>
-                    <div className="button-container"> {/* Contenedor de botones */}
+                    <div className="button-container">
                         <Button variant="secondary" onClick={onHide} className="mr-2">
                             Cancelar
                         </Button>
