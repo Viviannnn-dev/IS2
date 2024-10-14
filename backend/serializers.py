@@ -13,3 +13,9 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])  # Asegúrate de encriptar la contraseña
         user.save()
         return user
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Este email ya está en uso.")
+        return value
+
