@@ -40,9 +40,14 @@ urlpatterns = [
     path('api/cards/', views.get_cards, name='get_cards'),# Para listar todas las tarjetas
     path('api/cards/create/', views.create_card, name='create_card'), # Para crear una nueva tarjeta
     path('api/cards/<int:card_id>/', views.get_cards, name='get_card'),  # Para obtener una tarjeta específica
-     path('api/tasks/', views.get_tasks, name='get_tasks'),# Para listar todas las tareas
+    path('api/tasks/', views.get_tasks, name='get_tasks'),# Para listar todas las tareas
     path('api/tasks/create/', views.create_task, name='create_task'), # Para crear una nueva tarea
     path('api/tasks/<int:task_id>/', views.get_tasks, name='get_task'),  # Para obtener una tarea específica
+    path('api/workspace-update/<int:workspace_id>/', views.update_workspace, name='update_workspace'),
+    path('api/board-update/<int:board_id>/', views.update_board, name='update_board'),
+    path('api/list-update/<int:list_id>/', views.update_list, name='update_list'),
+    path('api/card-update/<int:card_id>/', views.update_card, name='update_card'),
+    path('api/task-update/<int:task_id>/', views.update_task, name='update_task'),
 
 ]
 

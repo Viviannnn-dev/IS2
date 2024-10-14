@@ -180,3 +180,58 @@ def create_task(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)  # Devuelve los datos de la tarea creada
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Devuelve errores si los datos no son válidos
+
+# Update Workspace
+@api_view(['PUT', 'PATCH'])
+@permission_classes([AllowAny])  
+def update_workspace(request, workspace_id):
+    workspace = get_object_or_404(Workspace, id=workspace_id)
+    serializer = WorkspaceSerializer(workspace, data=request.data, partial=True)  # partial=True permite actualizaciones parciales
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Update Board
+@api_view(['PUT', 'PATCH'])
+@permission_classes([AllowAny])  
+def update_board(request, board_id):
+    board = get_object_or_404(Board, id=board_id)
+    serializer = BoardSerializer(board, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Update List
+@api_view(['PUT', 'PATCH'])
+@permission_classes([AllowAny])  
+def update_list(request, list_id):
+    list_obj = get_object_or_404(List, id=list_id)
+    serializer = ListSerializer(list_obj, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Update Card
+@api_view(['PUT', 'PATCH'])
+@permission_classes([AllowAny])  
+def update_card(request, card_id):
+    card = get_object_or_404(Card, id=card_id)
+    serializer = CardSerializer(card, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Update Task
+@api_view(['PUT', 'PATCH'])
+@permission_classes([AllowAny])  
+def update_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    serializer = TaskSerializer(task, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

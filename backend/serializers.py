@@ -25,7 +25,7 @@ class WorkspaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Workspace
-        fields = ['description', 'name', 'status', 'users']  
+        fields = ['id', 'description', 'name', 'status', 'users']  
 
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,3 +46,4 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ['id', 'name', 'description', 'status', 'alert', 'due_date', 'card']
+
