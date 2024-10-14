@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Workspace
+from .models import Workspace, Board, List, Card, Task
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)  # Asegúrate de que la contraseña sea solo escritura
@@ -26,3 +26,23 @@ class WorkspaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workspace
         fields = ['description', 'name', 'status', 'users']  
+
+class BoardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Board
+        fields = ['id', 'name', 'workspace']
+
+class ListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = List
+        fields = ['id', 'name', 'maxWIP', 'board']
+
+class CardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Card
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'owner', 'label', 'list']
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ['id', 'name', 'description', 'status', 'alert', 'due_date', 'card']
