@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path 
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
+from .views import get_workspaces
 
 '''path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),'''
@@ -27,6 +28,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/login/', views.login),  # Agregar 'api/' para seguir una estructura RESTful
     path('api/register/', views.register),
+    path('api/save_workspace/', views.create_workspace),
+    path('api/workspace/', get_workspaces, name='list_workspaces'),  # Para listar todos los workspaces
+    path('api/workspace/<int:workspace_id>/', get_workspaces, name='get_workspace_by_id'),  # Para obtener uno específico
+   
+
 ]
 
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from .models import Workspace
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)  # Asegúrate de que la contraseña sea solo escritura
@@ -19,3 +20,9 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Este email ya está en uso.")
         return value
 
+class WorkspaceSerializer(serializers.ModelSerializer):
+    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())  #Le mandamos el id del usuario
+
+    class Meta:
+        model = Workspace
+        fields = ['description', 'name', 'status', 'users']  
