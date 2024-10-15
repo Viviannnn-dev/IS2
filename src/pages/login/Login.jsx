@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import './styles/login.css';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom'; // Para la redirección
-
-const clientId = "620787684491-us81869i1822t97vrnvdc70o6tdpdki9.apps.googleusercontent.com";
 
 export default function Login() {
   const [isSignUpActive, setIsSignUpActive] = useState(false);
@@ -48,38 +45,34 @@ export default function Login() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }), // Enviar datos de inicio de sesión
+        body: JSON.stringify({ username, password }), 
       });
   
       const data = await res.json();
   
       if (res.ok) {
         console.log('Inicio de sesión exitoso');
-        
-        // Guarda el token en localStorage
-        localStorage.setItem('token', data.token); // Asegúrate de que tu backend devuelva un token
-  
-        // Redirigir a la página principal
-        navigate('/home');
+        console.log('Token:', data.token);  
+        localStorage.setItem('token', data.token); // Guardar el token en el almacenamiento local
+        navigate('/home'); // Redirigir a la página principal
       } else {
         console.error('Error al iniciar sesión', data);
       }
+      
     } catch (error) {
       console.error("Error en la solicitud de inicio de sesión", error);
     }
   };
-  
 
   const handleSignUpClick = () => {
-    setIsSignUpActive(true); // Cambia al formulario de registro
+    setIsSignUpActive(true); 
   };
 
   const handleSignInClick = () => {
-    setIsSignUpActive(false); // Cambia al formulario de inicio de sesión
+    setIsSignUpActive(false); 
   };
 
   return (
-    <GoogleOAuthProvider clientId={clientId}>
       <div className='login-base'>
         <div className={`container-login ${isSignUpActive ? 'right-panel-active' : ''}`}>
           <div className="form-container-login sign-up-container-login">
@@ -91,6 +84,7 @@ export default function Login() {
                 placeholder="Usuario"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)} // Captura del usuario
+                required
               />
               <input
                 type="password"
@@ -98,15 +92,9 @@ export default function Login() {
                 placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)} // Captura de la contraseña
+                required
               />
               <button type="submit" className="button registrar-button">Registrarse</button>
-              <div className='btn'>
-                {/* Opción de registro con Google */}
-                <GoogleLogin
-                  onSuccess={() => {}}
-                  onFailure={() => {}}
-                />
-              </div>
             </form>
           </div>
 
@@ -119,6 +107,7 @@ export default function Login() {
                 placeholder="Usuario"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)} // Captura del usuario
+                required
               />
               <input
                 type="password"
@@ -126,16 +115,10 @@ export default function Login() {
                 placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)} // Captura de la contraseña
+                required
               />
               <button type="submit" className="button">Ingresar</button>
               <a href="/Recuperar" className="forgot-password-link">¿Olvidaste tu contraseña?</a>
-              <div className='btn'>
-                {/* Opción de inicio de sesión con Google */}
-                <GoogleLogin
-                  onSuccess={() => {}}
-                  onFailure={() => {}}
-                />
-              </div>
             </form>
           </div>
 
@@ -155,6 +138,5 @@ export default function Login() {
           </div>
         </div>
       </div>
-    </GoogleOAuthProvider>
   );
 }

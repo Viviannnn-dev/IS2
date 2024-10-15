@@ -14,12 +14,14 @@ def login(request):
     username = request.data.get('username')
     password = request.data.get('password')
 
-    # Verificar si el usuario existe y validar la contraseña
+    # Verificar si el usuario existe
     try:
         user = User.objects.get(username=username)
+        # Usar el método check_password() para verificar la contraseña encriptada
         if not user.check_password(password):
             return Response({'error': 'Contraseña incorrecta'}, status=status.HTTP_401_UNAUTHORIZED)
 
+        # Si la contraseña es correcta, generar el token
         token, created = Token.objects.get_or_create(user=user)
         serializer = UserSerializer(instance=user)
 
@@ -32,17 +34,28 @@ def login(request):
 @permission_classes([AllowAny])
 def register(request):
     serializer = UserSerializer(data=request.data)
-    
+
     if serializer.is_valid():
-        user = serializer.save()  # Guardar el usuario
-        user.set_password(user.password)  # Asegurarse de que la contraseña esté encriptada
+        print(serializer.validated_data)  # Depuración: Imprimir los datos validados
+
+        username = serializer.validated_data.get('username')
+        email = serializer.validated_data.get('email')
+        password = serializer.validated_data.get('password')
+
+        if email is None:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Crear el usuario manualmente
+        user = User(username=username, email=email)
+        user.set_password(password)  # Encriptar la contraseña
         user.save()
 
-        token = Token.objects.create(user=user)  # Crea el token
+        token = Token.objects.create(user=user)
 
         return Response({'token': token.key}, status=status.HTTP_201_CREATED)
-
+    
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])

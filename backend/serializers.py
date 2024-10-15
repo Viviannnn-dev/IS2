@@ -3,11 +3,10 @@ from django.contrib.auth.models import User
 from .models import Workspace, Board, List, Card, Task
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)  # Asegúrate de que la contraseña sea solo escritura
-
     class Meta:
         model = User
-        fields = ['username', 'password', 'email']  # Agrega otros campos que necesites
+        fields = ['username', 'email', 'password']  # Asegúrate de incluir 'email' en los campos
+        extra_kwargs = {'password': {'write_only': True}} # Agrega otros campos que necesites
 
     def create(self, validated_data):
         user = User(**validated_data)
