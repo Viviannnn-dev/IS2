@@ -5,7 +5,7 @@ import AddButton from '../button/AddButton';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-const Board = () => {
+const Board = ({ id, name, description }) => {
   const [lists, setLists] = useState([]);
   const [newListName, setNewListName] = useState('');
   const [newLimit, setNewLimit] = useState('');
@@ -16,19 +16,41 @@ const Board = () => {
 
   const listsContainerRef = useRef(null);
 
+  console.log("Board ID:", id);
+  console.log("Board Name:", name);
+
   //nombre de las listas
   const getListNames = () => {
     return lists.map(list => list.name); 
   };
 
   // Agregar una nueva lista
-  const addList = () => {
+  const addList = async(e) => {
     const parsedLimit = parseInt(newLimit, 10); 
     if (newListName && newLimit) {
-      setLists([{ name: newListName, cards: [], limit: parsedLimit }, ...lists]); // Agregar el límite a la lista
-      setNewListName('');
-      setNewLimit('');
-      setShowAddButton(false);
+      try {
+        const res = await fetch('http://localhost:8000/api/lists/create/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: newListName, maxWIP: newLimit ,board: id }), // Datos del registro
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          console.log('Tablero creado con éxito');
+            setLists([{ name: newListName, cards: [], limit: parsedLimit }, ...lists]); // Agregar el límite a la lista
+            setNewListName('');
+            setNewLimit('');
+            setShowAddButton(false);
+        } else {
+          console.error('Error al guardar la lista', data);
+        }
+      } catch (error) {
+        console.error("Error en la solicitud", error);
+      }
     }
   };
 
@@ -93,6 +115,10 @@ const Board = () => {
     setLists(updatedLists);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Evita que el formulario se envíe
+  };
+
   return (
     <div className="board">
       <div className="lists-container" ref={listsContainerRef}>
@@ -101,7 +127,7 @@ const Board = () => {
             <List key={index} list={list} listIndex={index} onAddCard={addCardToList} onRenameList={renameList} onDeleteList={deleteList} listNames={getListNames()} />
           ))}
           <div className="add-list-container">
-            <form onSubmit={addList} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
               <input
                 type="text"
                 value={newListName}
