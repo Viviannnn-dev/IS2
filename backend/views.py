@@ -103,14 +103,31 @@ def get_boards(request, board_id=None):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
-@permission_classes([AllowAny])  # Cambia a IsAuthenticated si deseas restringir el acceso
+@permission_classes([AllowAny])
 def create_board(request):
-    # Crear un nuevo board
-    serializer = BoardSerializer(data=request.data)
+    # Obtener el nombre del board y del workspace desde el request
+    board_name = request.data.get('name', '').strip()
+    workspace_name = request.data.get('workspace', '').strip()
+    
+    # Verificar si el workspace ya existe, ignorando mayúsculas
+    workspace = Workspace.objects.filter(name__iexact=workspace_name).first()
+    
+    if not workspace:
+        # Si el workspace no existe, devuelve un mensaje indicando que debe crearse
+        return Response({'error': 'Workspace no encontrado. Debes crearlo primero.'}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Verificar si ya existe un board con el mismo nombre en ese workspace
+    if Board.objects.filter(name__iexact=board_name, workspace=workspace).exists():
+        return Response({'error': 'Ya existe un Board con ese nombre en el Workspace.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Crear el nuevo board en el workspace existente
+    serializer = BoardSerializer(data={'name': board_name, 'workspace': workspace.id})
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny]) 

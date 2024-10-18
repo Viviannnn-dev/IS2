@@ -65,10 +65,14 @@ export default function Login() {
   };
 
   const handleSignUpClick = () => {
+    setUsername('');
+    setPassword('');
     setIsSignUpActive(true); 
   };
 
   const handleSignInClick = () => {
+    setUsername('');
+    setPassword('');
     setIsSignUpActive(false); 
   };
 
@@ -118,7 +122,6 @@ export default function Login() {
                 required
               />
               <button type="submit" className="button">Ingresar</button>
-              <a href="/Recuperar" className="forgot-password-link">¿Olvidaste tu contraseña?</a>
             </form>
           </div>
 

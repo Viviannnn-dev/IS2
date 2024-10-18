@@ -7,19 +7,35 @@ const AddBoardForm = ({ onAddBoard, onClose }) => {
   const [boardName, setBoardName] = useState('');
   const [workspace, setWorkspace] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
 
     // Validar que ambos campos tengan contenido
     if (boardName && workspace) {
-      const newBoard = { name: boardName };
-      console.log("Form submitted with:", { name: boardName, workspace }); // Debug
-      onAddBoard(newBoard); // Llamar a la función onAddBoard sin parámetros, ya que no los usas en handleAddBoard
-      setBoardName(''); // Limpiar el campo
-      setWorkspace(''); // Limpiar el campo
-      onClose(); // Cerrar el formulario
-    } else {
-      console.log("Form fields are empty"); // Debug para saber si algún campo está vacío
+      try {
+        const res = await fetch('http://localhost:8000/api/boards/create/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: boardName, workspace }), // Datos del registro
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          console.log('Tablero creado con éxito');
+          const newBoard = { id: data.id, name: data.name, workspace: data.workspace }; // Usar los datos devueltos
+            onAddBoard(newBoard); // Llamar a la función onAddBoard con el nuevo board
+            setBoardName(''); // Limpiar el campo
+            setWorkspace(''); // Limpiar el campo
+            onClose(); // Cerrar el formulario
+        } else {
+          console.error('Error al guardar el tablero', data);
+        }
+      } catch (error) {
+        console.error("Error en la solicitud", error);
+      }
     }
   };
 
