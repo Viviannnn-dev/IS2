@@ -39,11 +39,11 @@ class List(models.Model):
 
 class Card(models.Model):
     name = models.CharField(max_length=50)
-    description = models.TextField()  # Asegúrate de agregar paréntesis
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    description = models.TextField(blank=True)  # Campo opcional, puede estar vacío
+    created_at = models.DateTimeField(auto_now_add=True)  # Se añade automáticamente
+    due_date = models.DateTimeField(blank=True, null=True)  # Campo opcional, puede estar vacío y no tiene valor por defecto
     owner = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación 1:M con User
-    label = models.CharField(max_length=10)
+    label = models.CharField(max_length=10, blank=True)  # Campo opcional, puede estar vacío
     list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='cards')  # Relación M:1 con List
 
     def __str__(self):

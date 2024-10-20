@@ -39,7 +39,7 @@ class ListSerializer(serializers.ModelSerializer):
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'owner', 'label', 'list']
+        fields = ['id', 'name', 'description', 'created_at', 'due_date', 'owner', 'label', 'list']
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:

@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path 
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
-from .views import get_workspaces, get_boards , create_board, get_lists , create_list
+from .views import get_workspaces, get_boards , create_board, get_lists , create_list, get_lists_by_board,get_list_by_id,get_cards_by_list
 
 '''path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),'''
@@ -35,11 +35,13 @@ urlpatterns = [
     path('api/boards/<int:board_id>/', get_boards, name='get_board_by_id'),  # Para obtener un board específico
     path('api/boards/create/', create_board, name='create_board'),  # Para crear un nuevo board
     path('api/lists/', get_lists, name='list_lists'),  # Para listar todas las listas
-    path('api/lists/<int:list_id>/', get_lists, name='get_list_by_id'),  # Para obtener una lista específica
+    path('api/lists/board/<int:board_id>/', get_lists_by_board, name='get_lists_by_board'),  # Para obtener listas por board_id
+    path('api/lists/<int:list_id>/', get_list_by_id, name='get_list_by_id'),  # Para obtener una lista específica
     path('api/lists/create/', create_list, name='create_list'),  # Para crear una nueva lista
     path('api/cards/', views.get_cards, name='get_cards'),# Para listar todas las tarjetas
     path('api/cards/create/', views.create_card, name='create_card'), # Para crear una nueva tarjeta
     path('api/cards/<int:card_id>/', views.get_cards, name='get_card'),  # Para obtener una tarjeta específica
+    path('api/lists/cards/<int:list_id>/', views.get_cards_by_list, name='get_cards_by_list'),
     path('api/tasks/', views.get_tasks, name='get_tasks'),# Para listar todas las tareas
     path('api/tasks/create/', views.create_task, name='create_task'), # Para crear una nueva tarea
     path('api/tasks/<int:task_id>/', views.get_tasks, name='get_task'),  # Para obtener una tarea específica

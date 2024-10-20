@@ -128,23 +128,45 @@ def create_board(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@permission_classes([AllowAny]) 
+def get_lists(request):
+    # Obtener todas las listas
+    lists = List.objects.all()
+    serializer = ListSerializer(lists, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_cards_by_list(request, list_id):
+    try:
+        # Filtrar las tarjetas por el ID de la lista
+        cards = Card.objects.filter(list_id=list_id)
+        serializer = CardSerializer(cards, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except List.DoesNotExist:
+        return Response({"error": "List not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['GET'])
+@permission_classes([AllowAny]) 
+def get_lists_by_board(request, board_id):
+    # Filtrar listas por ID del tablero
+    lists = List.objects.filter(board=board_id)
+    serializer = ListSerializer(lists, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @permission_classes([AllowAny]) 
-def get_lists(request, list_id=None):
-    if list_id is not None:
-        # Obtener una lista específica por ID
-        try:
-            list_obj = List.objects.get(id=list_id)
-            serializer = ListSerializer(list_obj)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except List.DoesNotExist:
-            return Response({'error': 'Lista no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
-    else:
-        # Obtener todas las listas
-        lists = List.objects.all()
-        serializer = ListSerializer(lists, many=True)
+def get_list_by_id(request, list_id):
+    # Filtrar por ID de lista específico
+    try:
+        list_item = List.objects.get(id=list_id)
+        serializer = ListSerializer(list_item)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    except List.DoesNotExist:
+        return Response({"error": "List not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])  

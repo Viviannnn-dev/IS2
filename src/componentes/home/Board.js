@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import List from './List';
 import './board.css';
 import AddButton from '../button/AddButton';
@@ -19,14 +19,32 @@ const Board = ({ id, name, description }) => {
   console.log("Board ID:", id);
   console.log("Board Name:", name);
 
+  // UseEffect para obtener las listas del tablero al cargar el componente
+  useEffect(() => {
+    const fetchLists = async () => {
+      try {
+        console.log("id:", id);
+
+        const response = await fetch(`http://localhost:8000/api/lists/board/${id}/`);        const data = await response.json();
+        setLists(data);
+        console.log("Listas obtenidas:", data);
+      } catch (error) {
+        console.error("Error al obtener las listas:", error);
+      }
+    };
+
+    fetchLists();
+  }, [id]); // Se ejecuta cuando el ID del tablero cambia
+
   //nombre de las listas
   const getListNames = () => {
-    return lists.map(list => list.name); 
+    return lists.map(list => list.name);
   };
 
   // Agregar una nueva lista
-  const addList = async(e) => {
-    const parsedLimit = parseInt(newLimit, 10); 
+  const addList = async (e) => {
+    const parsedLimit = parseInt(newLimit, 10);
+
     if (newListName && newLimit) {
       try {
         const res = await fetch('http://localhost:8000/api/lists/create/', {
@@ -34,17 +52,17 @@ const Board = ({ id, name, description }) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: newListName, maxWIP: newLimit ,board: id }), // Datos del registro
+          body: JSON.stringify({ name: newListName, maxWIP: newLimit, board: id }), // Datos del registro
         });
 
         const data = await res.json();
 
         if (res.ok) {
           console.log('Tablero creado con éxito');
-            setLists([{ name: newListName, cards: [], limit: parsedLimit }, ...lists]); // Agregar el límite a la lista
-            setNewListName('');
-            setNewLimit('');
-            setShowAddButton(false);
+          setLists([{ id: data.id, name: newListName, maxWIP: newLimit, cards: [], limit: parsedLimit }, ...lists]); // Agregar el ID a la lista
+          setNewListName('');
+          setNewLimit('');
+          setShowAddButton(false);
         } else {
           console.error('Error al guardar la lista', data);
         }
@@ -71,30 +89,10 @@ const Board = ({ id, name, description }) => {
     setShowAddButton(listName.trim() !== '' && limit.trim() !== '');
   };
 
-  // Función para añadir una tarjeta a una lista específica
-  const addCardToList = (listIndex, cardName) => {
-    const updatedLists = [...lists];
-    const list = updatedLists[listIndex];
-  
-    // Verificar si se ha alcanzado el límite de tarjetas
-    if (list.cards.length < list.limit) {
-      // Añadir la tarjeta normalmente si no se ha alcanzado el límite
-      updatedLists[listIndex].cards.push({ name: cardName, exceedsLimit: false });
-    } else {
-      // Añadir la tarjeta con la indicación de que excede el límite
-      updatedLists[listIndex].cards.push({ name: cardName, exceedsLimit: true });
-      setSmShow(true); // Mostrar el modal
-      setExceededListIndex(listIndex); // Guardar el índice de la lista que excedió
-      setExceededCardIndex(list.cards.length); // Guardar el índice de la tarjeta excedida
-    }
-  
-    setLists(updatedLists); // Actualizar el estado siempre que se agregue una tarjeta
-  };
-
   const handleCloseModal = () => {
     if (exceededListIndex !== null && exceededCardIndex !== null) {
       const updatedLists = [...lists];
-      
+
       // Eliminar la última tarjeta añadida (que excedió el límite)
       updatedLists[exceededListIndex].cards.pop();
       setLists(updatedLists); // Actualizar el estado de las listas
@@ -124,7 +122,7 @@ const Board = ({ id, name, description }) => {
       <div className="lists-container" ref={listsContainerRef}>
         <div className="lists">
           {lists.map((list, index) => (
-            <List key={index} list={list} listIndex={index} onAddCard={addCardToList} onRenameList={renameList} onDeleteList={deleteList} listNames={getListNames()} />
+            <List key={index} list={list} listIndex={index} onRenameList={renameList} onDeleteList={deleteList} listNames={getListNames()} />
           ))}
           <div className="add-list-container">
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
