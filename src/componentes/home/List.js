@@ -2,14 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import AddButton from '../button/AddButton';
+import Modal from 'react-bootstrap/Modal'; // Importar Modal de Bootstrap
 
-const List = ({ list, listIndex, onRenameList, onDeleteList, listNames }) => {
+const List = ({ list, listIndex, onRenameList, onDeleteList }) => {
   const [newCardName, setNewCardName] = useState('');
   const [showAddButton, setShowAddButton] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [newListName, setNewListName] = useState(list.name);
   const [cards, setCards] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState('');const [showErrorModal, setShowErrorModal] = useState(false); 
+  const [errorCardId, setErrorCardId] = useState(null); //
+
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -53,7 +56,7 @@ const List = ({ list, listIndex, onRenameList, onDeleteList, listNames }) => {
             const newCard = await response.json();
             setNewCardName('');
             setShowAddButton(false);
-            setError('');
+            setErrorCardId(null); 
             setCards((prevCards) => [...prevCards, newCard]);
           } else {
             console.error('Error al añadir la tarjeta:', response.statusText);
@@ -67,7 +70,8 @@ const List = ({ list, listIndex, onRenameList, onDeleteList, listNames }) => {
         setCards((prevCards) => [...prevCards, tempCard]);
         setNewCardName('');
         setShowAddButton(false);
-        setError(`No se pueden añadir más de ${list.maxWIP} tarjetas a esta lista.`);
+        setErrorCardId(tempCard.id); 
+        setShowErrorModal(true);
       }
     }
   };
@@ -82,6 +86,13 @@ const List = ({ list, listIndex, onRenameList, onDeleteList, listNames }) => {
     if (newListName.trim() !== '') {
       onRenameList(listIndex, newListName);
     }
+  };
+
+  const handleCloseModal = () => {
+    // Al cerrar el modal, eliminar la tarjeta con el ID de error
+    setCards((prevCards) => prevCards.filter(card => card.id !== errorCardId));
+    setErrorCardId(null);
+    setShowErrorModal(false); // Cerrar el modal
   };
 
   return (
@@ -106,15 +117,14 @@ const List = ({ list, listIndex, onRenameList, onDeleteList, listNames }) => {
       )}
 
       <div className="cards">
-        {cards.map((card, index) => {
+        {cards.map((card) => {
           // Comprobar si la tarjeta actual excede el límite
-          const isLimitExceeded = cards.length > list.maxWIP && index === cards.length - 1;
+          const isLimitExceeded = cards.length > list.maxWIP && card.id === errorCardId;
           return (
             <Card
-              key={index}
+              key={card.id}
               card={card}
               error={isLimitExceeded ? 'card-limit-exceeded' : ''}
-              listNames={listNames}
             />
           );
         })}
@@ -130,6 +140,14 @@ const List = ({ list, listIndex, onRenameList, onDeleteList, listNames }) => {
         />
         {showAddButton && <AddButton onClick={addCard} />}
       </form>
+      <Modal show={showErrorModal} onHide={handleCloseModal} size="sm">
+        <Modal.Header closeButton>
+          <Modal.Title>Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Límite de tarjetas superado para la lista: {list.name}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

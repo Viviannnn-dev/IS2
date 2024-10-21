@@ -3,8 +3,11 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './cardDetailModal.css';
+import { useLists } from '../context/ListContext';
 
-const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
+const CardDetailModal = ({ show, onHide, card }) => {
+    console.log(card.id);
+    const { lists } = useLists();
     const [selectedColor, setSelectedColor] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [tasks, setTasks] = useState([]);
@@ -12,11 +15,10 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
     
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    
+    console.log(lists);
     const yesterday = new Date();
     yesterday.setHours(0,0, 0, 0, 0);
     yesterday.setDate(currentDate.getDate() - 1);
-
     function areDatesEqual(date1, date2) {
         console.log(date1);
         console.log(date2);
@@ -105,11 +107,37 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
         }
     };
 
-    const handleSave = (e) => {
-        e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-        onSave({ ...formData, id: card.id }); // Pasar el objeto completo a onSave, incluyendo el ID de la tarjeta para la actualización
-        onHide(); // Cerrar el modal
+    const handleSaveToDB = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:8000/api/card-update/${card.id}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    name: formData.name, 
+                    description: formData.description, 
+                    due_date: formData.dueDate, 
+                    owner: formData.assignedUser, 
+                    label: formData.label, 
+                    list: formData.selectedList,
+                }),
+            });
+    
+            if (response.ok) {
+                const updatedCard = await response.json();
+                console.log('Card updated successfully:', updatedCard);
+                onHide(); // Cerrar el modal
+            } else {
+                const errorData = await response.json();
+                console.error('Failed to update card:', errorData);
+            }
+        } catch (error) {
+            console.error('Error updating card:', error);
+        }
     };
+    
 
     const selectStyle = {
         backgroundColor: selectedColor || 'white',
@@ -122,7 +150,7 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
                 <Modal.Title className="modal-title-custom">{card.name}</Modal.Title>
             </Modal.Header>
             <Modal.Body className="modal-body-custom">
-                <Form onSubmit={handleSave}>
+                <Form onSubmit={handleSaveToDB}>
                     <Form.Group className="mb-1" controlId="nombre">
                         <Form.Label>Nombre de la Actividad</Form.Label>
                         <Form.Control
@@ -186,11 +214,11 @@ const CardDetailModal = ({ show, onHide, card, onSave, lists }) => {
                             className="form-control-sm"
                         >
                             <option value="">Selecciona un estado</option>
-                            {lists.map((list, index) => (
-                                <option key={index} value={list}>
-                                    {list} {/* Nombre de la lista */}
-                                </option>
-                            ))}
+                            {lists.map((list) => (
+                            <option key={list.id} value={list.id}> {/* Usa list.id como key y valor */}
+                                {list.name} {/* Muestra el nombre de la lista */}
+                            </option>
+                        ))}
                         </Form.Select>
                     </Form.Group>
                     <div>

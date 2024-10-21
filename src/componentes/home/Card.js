@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import CardDetailModal from '../forms/CardDetailModal';
 
-const Card = ({ card, error, listNames }) => {
+const Card = ({ card, error }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleOpenModal = () => setShowModal(true);
@@ -17,7 +17,6 @@ const Card = ({ card, error, listNames }) => {
         show={showModal}
         onHide={handleCloseModal}
         card={card}
-        lists={listNames}
       />
     </>
   );

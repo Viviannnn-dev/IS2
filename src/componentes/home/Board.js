@@ -4,9 +4,10 @@ import './board.css';
 import AddButton from '../button/AddButton';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { useLists } from '../context/ListContext';
 
 const Board = ({ id, name, description }) => {
-  const [lists, setLists] = useState([]);
+  const { lists, setLists } = useLists();
   const [newListName, setNewListName] = useState('');
   const [newLimit, setNewLimit] = useState('');
   const [showAddButton, setShowAddButton] = useState(false);
@@ -16,6 +17,7 @@ const Board = ({ id, name, description }) => {
 
   const listsContainerRef = useRef(null);
 
+  
   console.log("Board ID:", id);
   console.log("Board Name:", name);
 
@@ -25,9 +27,11 @@ const Board = ({ id, name, description }) => {
       try {
         console.log("id:", id);
 
-        const response = await fetch(`http://localhost:8000/api/lists/board/${id}/`);        const data = await response.json();
+        const response = await fetch(`http://localhost:8000/api/lists/board/${id}/`);      
+        const data = await response.json();
         setLists(data);
         console.log("Listas obtenidas:", data);
+        console.log(lists);
       } catch (error) {
         console.error("Error al obtener las listas:", error);
       }
