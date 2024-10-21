@@ -15,7 +15,6 @@ const CardDetailModal = ({ show, onHide, card }) => {
     
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    console.log(lists);
     const yesterday = new Date();
     yesterday.setHours(0,0, 0, 0, 0);
     yesterday.setDate(currentDate.getDate() - 1);
@@ -75,20 +74,51 @@ const CardDetailModal = ({ show, onHide, card }) => {
         creationDate: '', // Fecha de creación
     });
 
-    useEffect(() => {
-        if (show) {
-            setFormData({
-                name: card.name || '', // Muestra el valor existente o vacío
-                description: card.description || '', // Muestra el valor existente o vacío
-                dueDate: card.dueDate || '', // Muestra el valor existente o vacío
-                assignedUser: card.assignedUser || '', // Muestra el valor existente o vacío
-                label: card.label || '', // Muestra el valor existente o vacío
-                selectedList: card.selectedList || '', // Muestra el estado existente o vacío
-                creationDate: card.creationDate || new Date().toISOString().split('T')[0], // Si no existe, establece la fecha actual
-            });
-        }
-    }, [show, card]);
+    const colorMapping = {
+        '#ffb3d9': 1,
+        '#add8e6': 2,
+        '#b2e2b2': 3,
+        '#ffcc99': 4,
+    };
+    
 
+    useEffect(() => {
+        const fetchCardData = async () => {
+            if (show && card && card.id) {
+                try {
+                    const response = await fetch(`http://localhost:8000/api/cards/${card.id}/`);
+                    if (response.ok) {
+                        const data = await response.json();
+    
+                        // Aquí buscamos el color que coincide con el valor numérico en `data.label`
+                        const colorKey = Object.keys(colorMapping).find(key => colorMapping[key] === data.label);
+    
+                        setFormData({
+                            name: data.name || '',
+                            description: data.description || '',
+                            dueDate: data.due_date || '',
+                            assignedUser: 'Ruth',
+                            label: colorKey ? colorMapping[colorKey] : '', // Guarda el valor numérico
+                            selectedList: '',
+                            creationDate: data.creationDate || new Date().toISOString().split('T')[0],
+                        });
+    
+                        // Si el color está definido en el mapeo, establece el color seleccionado
+                        if (colorKey) {
+                            setSelectedColor(colorKey); // Establece el color para el select
+                        }
+                    } else {
+                        console.error('Error fetching card data:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error fetching card data:', error);
+                }
+            }
+        };
+    
+        fetchCardData();
+    }, [show, card]);
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -192,19 +222,27 @@ const CardDetailModal = ({ show, onHide, card }) => {
                         />
                     </Form.Group>
                     <Form.Group className="mb-2" controlId="etiqueta">
-                        <Form.Label>Etiqueta</Form.Label>
-                        <Form.Select
-                            style={selectStyle}
-                            name="label" // Añadir nombre aquí
-                            value={selectedColor} // Mantiene el color seleccionado
-                            onChange={handleChange}>
-                            <option value="" style={{ backgroundColor: 'white', color: 'black'}}>Seleccione una opción</option>
-                            <option value="#ffb3d9" style={{ backgroundColor: "#ffb3d9"}}></option>
-                            <option value="#add8e6" style={{ backgroundColor: "#add8e6"}}></option>
-                            <option value="#b2e2b2" style={{ backgroundColor: "#b2e2b2"}}></option>
-                            <option value="#ffcc99" style={{ backgroundColor: "#ffcc99"}}></option>
-                        </Form.Select>
-                    </Form.Group>
+    <Form.Label>Etiqueta</Form.Label>
+    <Form.Select
+        style={selectStyle}
+        name="label"
+        value={selectedColor} // Mantiene el color seleccionado directamente
+        onChange={(e) => {
+            const color = e.target.value;
+            const numericValue = colorMapping[color]; // Obtiene el valor numérico correspondiente
+            setSelectedColor(color);
+            setFormData((prevData) => ({
+                ...prevData,
+                label: numericValue || '', // Guarda el valor numérico
+            }));
+        }}
+    >
+        <option value="" style={{ backgroundColor: 'white', color: 'black' }}>Seleccione una opción</option>
+        {Object.keys(colorMapping).map(color => (
+            <option key={color} value={color} style={{ backgroundColor: color }}></option>
+        ))}
+    </Form.Select>
+</Form.Group>
                     <Form.Group className="mb-2" controlId="estado">
                         <Form.Label>Estado</Form.Label>
                         <Form.Select
