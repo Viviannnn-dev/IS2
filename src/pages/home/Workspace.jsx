@@ -1,0 +1,116 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useWorkspace } from '../../componentes/context/WorkspaceContext';
+import './styles/workspace.css';
+
+function Workspace({ user }) {
+  const [workspaces, setWorkspaces] = useState([]);
+  const { setWorkspace } = useWorkspace();
+  const [users, setUsers] = useState([]);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    users: []
+  });
+  const navigate = useNavigate();
+
+  // Obtener los workspaces del usuario autenticado
+  useEffect(() => {
+    if (user) {
+      axios.get(`http://localhost:8000/api/workspace/`, { params: { user_id: user.id } })
+        .then(response => setWorkspaces(response.data))
+        .catch(error => console.error('Error al obtener workspaces:', error));
+    }
+  }, [user]);
+
+  // Obtener todos los usuarios para el selector
+  useEffect(() => {
+    axios.get(`http://localhost:8000/api/users/`)
+      .then(response => setUsers(response.data))
+      .catch(error => console.error('Error al obtener usuarios:', error));
+  }, []);
+
+  // Manejar el formulario para crear un nuevo workspace
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleUserSelect = (e) => {
+    const selectedUsers = Array.from(e.target.selectedOptions, option => option.value);
+    setFormData({ ...formData, users: selectedUsers });
+  };
+
+  const handleCreateWorkspace = (e) => {
+    e.preventDefault();
+    axios.post(`http://localhost:8000/api/save_workspace/`, formData)
+      .then(response => {
+        setWorkspace(response.data);
+        navigate('/home');
+      })
+      .catch(error => console.error('Error al crear workspace:', error));
+  };
+
+  // Función para redirigir al Home con los datos del Workspace seleccionado
+  const handleWorkspaceClick = (workspace) => {
+    setWorkspace(workspace);
+    console.log(workspace);
+    navigate('/home');
+  };
+
+  return (
+    <div className='workspace-base'>
+      <h1 className='workspace-title'>Workspace</h1>
+      <div className='workspace-content'>
+        {/* Columna izquierda: Lista de Workspaces */}
+        <div className='workspace-list'>
+          <h2>Existentes</h2>
+          {workspaces.map(workspace => (
+            <button
+              key={workspace.id}
+              onClick={() => handleWorkspaceClick(workspace)}
+              className='workspace-button'
+            >
+              {workspace.name}
+            </button>
+          ))}
+        </div>
+
+   {/* Columna derecha: Formulario para Crear Nuevo Workspace */}
+<div className='workspace-form'>
+  <h2>Crear Nuevo</h2>
+  <form onSubmit={handleCreateWorkspace}>
+    <div className='form-group'>
+      <label>Nombre:</label>
+      <input type="text" name="name" value={formData.name} onChange={handleInputChange} required />
+    </div>
+    <div className='form-group'>
+      <label>Descripción:</label>
+      <textarea name="description" value={formData.description} onChange={handleInputChange} required />
+    </div>
+    <div className='form-group'>
+      <label>Usuarios Asociados:</label>
+      <select name="users" multiple onChange={handleUserSelect}>
+        {users.map(user => (
+          <option key={user.id} value={user.id}>{user.username}</option>
+        ))}
+      </select>
+    </div>
+    <div className='button-container'> {/* Nueva clase para el botón */}
+        <button type="submit">Crear Workspace</button>
+    </div> 
+     </form>
+</div>
+
+
+
+      </div>
+    </div>
+  );
+}
+
+export default Workspace;

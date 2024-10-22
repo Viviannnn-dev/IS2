@@ -1,0 +1,101 @@
+.workspace-base {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    background-color: #f0f0f0; /* Cambia este color según tu preferencia */
+    padding-top: 0px;
+}
+    
+.workspace-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.workspace-content {
+    display: flex;
+    justify-content: space-between;
+    width: 80%; /* Ajusta el ancho según tu diseño */
+}
+
+.workspace-content h2 {
+    font-family: "Poppins", sans-serif;
+}
+
+.workspace-list, .workspace-form {
+    text-align: center;
+    flex: 1;
+    margin: 10px;
+}
+
+.workspace-button {
+    display: block;
+    width: 100%; /* Ocupar todo el ancho del contenedor */
+    margin: 10px 0;
+    padding: 10px;
+    background-color: transparent; /* Sin color de fondo */
+    color: black; /* Cambia este color según tu preferencia */
+    border: none; /* Sin borde */
+    border-radius: 0; /* Sin bordes redondeados */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Transición suave para el color de fondo */
+}
+
+.workspace-button:hover {
+    background-color: #007bff; /* Color al pasar el mouse por el botón */
+    color: white; /* Cambia el color del texto al pasar el mouse */
+}
+
+.workspace-form {
+ font-family: "Poppins", sans-serif; /* Aplicar la fuente a toda la sección del formulario */
+ margin-top: 10px; /* Reducir el espacio entre el título y el formulario */
+}
+
+.workspace-form div {
+margin: -10px 0; /* Espacio reducido entre los campos del formulario */ display: flex; /* Alinear elementos en una fila */ align-items: center; /* Alinear verticalmente al centro */
+}
+.form-group {
+    display: flex; /* Alinear elementos en una fila */
+    flex-direction: row; /* Elementos en fila */
+    align-items: center; /* Alinear verticalmente al centro */
+    margin-bottom: 1px; /* Espacio entre grupos de formulario */
+}
+
+.workspace-form label {
+    flex: 0 0 150px; /* Fijar un ancho para los labels */
+    margin-right: 10px; /* Espacio entre la etiqueta y el input */
+    text-align: left; 
+}
+
+.workspace-form input,
+.workspace-form textarea,
+.workspace-form select { width: 100%; /* Cambia a 100% para otros campos si es necesario */
+    flex: 1; /* Hacer que los inputs ocupen el resto del espacio */
+    height: 40px; /* Altura uniforme para todos los inputs */
+    padding: 5px; /* Ajusta el espaciado interno */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 5px; /* Bordes redondeados */
+    font-family: "Poppins", sans-serif; /* Fuente para inputs */
+}
+.workspace-form input:focus,
+.workspace-form textarea:focus,
+.workspace-form select:focus {
+ outline: none; /* Sin borde al enfocar */
+ border-color: #007bff; /* Cambiar el color del borde al enfocar */
+ font-family: "Poppins", sans-serif; /* Fuente para inputs */
+
+}
+
+.workspace-form textarea {
+    height: 50px; /* Altura específica para el textarea */
+}
+
+.button-container {
+    margin-top: 30px !important; /* Ajusta este valor según sea necesario */
+    justify-content: center;
+}
+
+
+

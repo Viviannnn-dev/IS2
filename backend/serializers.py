@@ -5,7 +5,7 @@ from .models import Workspace, Board, List, Card, Task
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']  # Asegúrate de incluir 'email' en los campos
+        fields = ['id','username', 'email', 'password']  # Asegúrate de incluir 'email' en los campos
         extra_kwargs = {'password': {'write_only': True}} # Agrega otros campos que necesites
 
     def create(self, validated_data):

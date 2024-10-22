@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import './cardDetailModal.css';
 import { useLists } from '../context/ListContext';
 
-const CardDetailModal = ({ show, onHide, card }) => {
+const CardDetailModal = ({ show, onHide, card , onCardUpdate}) => {
     console.log(card.id);
     const { lists } = useLists();
     const [selectedColor, setSelectedColor] = useState('');
@@ -73,6 +73,17 @@ const CardDetailModal = ({ show, onHide, card }) => {
         selectedList: '', // Estado seleccionado
         creationDate: '', // Fecha de creación
     });
+
+    useEffect(() => {
+        if (show && card) {
+            setFormData({
+                name: card.name,
+                description: card.description,
+                dueDate: card.dueDate,
+                selectedList: card.listId, // Id de la lista actual de la tarjeta
+            });
+        }
+    }, [show, card]);
 
     const colorMapping = {
         '#ffb3d9': 1,
@@ -158,6 +169,7 @@ const CardDetailModal = ({ show, onHide, card }) => {
             if (response.ok) {
                 const updatedCard = await response.json();
                 console.log('Card updated successfully:', updatedCard);
+                onCardUpdate(updatedCard); // Llamar a la función del componente padre
                 onHide(); // Cerrar el modal
             } else {
                 const errorData = await response.json();

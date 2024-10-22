@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/login/Login';
 import Home from './pages/home/Home';
+import Workspace from './pages/home/Workspace';
 import './App.css';
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
         {/* Login */}
         <Route path="/login" element={<Login setUser={setUser} />} />
         {/* Home solo es accesible si hay un usuario */}
+        
+        <Route path="/workspace" element={user ? <Workspace user={user} /> : <Navigate to="/login" />} />
+
         <Route path="/home" element={user ? <Home user={user} /> : <Navigate to="/login" />} />
       </Routes>
     </Router>

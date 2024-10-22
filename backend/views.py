@@ -8,6 +8,19 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Workspace,Board,List,Card, Task
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_users(request):
+    if request.method == 'GET':
+        users = User.objects.all()  # Obtener todos los usuarios
+        serializer = UserSerializer(users, many=True)  # Serializar los usuarios
+
+        print(serializer.data)  # Depuración: Imprimir los datos serializados
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response({'error': 'Invalid method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
@@ -288,3 +301,14 @@ def update_task(request, task_id):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([AllowAny])  # Cambia esto según sea necesario
+def delete_list(request, list_id):
+    # Obtén la lista por su ID
+    list_instance = get_object_or_404(List, id=list_id)
+    
+    # Elimina la lista
+    list_instance.delete()
+    
+    return Response({"message": "Lista eliminada con éxito."}, status=status.HTTP_204_NO_CONTENT)

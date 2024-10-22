@@ -4,7 +4,7 @@ import Card from './Card';
 import AddButton from '../button/AddButton';
 import Modal from 'react-bootstrap/Modal'; // Importar Modal de Bootstrap
 
-const List = ({ list, listIndex, onRenameList, onDeleteList }) => {
+const List = ({ list, listIndex, onRenameList, onDeleteList,onCardMoved }) => {
   const [newCardName, setNewCardName] = useState('');
   const [showAddButton, setShowAddButton] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -31,6 +31,24 @@ const List = ({ list, listIndex, onRenameList, onDeleteList }) => {
 
     fetchCards();
   }, [list.id]);
+
+  const handleCardUpdate = (updatedCard) => {
+    if (updatedCard.listId === list.id) {
+        // Si la tarjeta sigue en la misma lista, actualizar
+        setCards((prevCards) =>
+            prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
+        );
+    } else {
+        // Si la tarjeta ha cambiado de lista, eliminar de esta lista
+        setCards((prevCards) => prevCards.filter((card) => card.id !== updatedCard.id));
+        // Llamar a la función para mover la tarjeta a otra lista
+        onCardMoved(updatedCard);
+    }
+};
+
+const handleCardMoved = (updatedCard, newListId) => {
+  onCardMoved(updatedCard, newListId);
+};
 
   const handleEditName = () => setIsEditingName(true);
   const handleListNameChange = (e) => setNewListName(e.target.value);
@@ -125,6 +143,9 @@ const List = ({ list, listIndex, onRenameList, onDeleteList }) => {
               key={card.id}
               card={card}
               error={isLimitExceeded ? 'card-limit-exceeded' : ''}
+              onCardUpdate={handleCardUpdate}
+              onMoveCard={handleCardMoved} // Pasar la función para mover tarjeta
+
             />
           );
         })}

@@ -54,7 +54,7 @@ export default function Login() {
         console.log('Inicio de sesión exitoso');
         console.log('Token:', data.token);  
         localStorage.setItem('token', data.token); // Guardar el token en el almacenamiento local
-        navigate('/home'); // Redirigir a la página principal
+        navigate('/workspace'); // Redirigir a la página principal
       } else {
         console.error('Error al iniciar sesión', data);
       }

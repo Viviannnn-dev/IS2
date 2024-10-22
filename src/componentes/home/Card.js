@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import CardDetailModal from '../forms/CardDetailModal';
 
-const Card = ({ card, error }) => {
+const Card = ({ card, error , onCardUpdate, onMoveCard }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleOpenModal = () => setShowModal(true);
@@ -17,6 +17,8 @@ const Card = ({ card, error }) => {
         show={showModal}
         onHide={handleCloseModal}
         card={card}
+        onCardUpdate={onCardUpdate} // Pasar la función de actualización de tarjeta
+        onMoveCard={onMoveCard} // Pasar la función de mover tarjeta
       />
     </>
   );

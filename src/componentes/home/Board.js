@@ -112,9 +112,25 @@ const Board = ({ id, name, description }) => {
     setLists(updatedLists); // Guardar el nuevo estado
   };
 
-  const deleteList = (listIndex) => {
+  const deleteList =async (listIndex) => {
     const updatedLists = lists.filter((_, index) => index !== listIndex);
+    const listId = lists[listIndex].id;
     setLists(updatedLists);
+    try {
+      const response = await fetch(`http://localhost:8000/api/lists/delete/${listId}/`, {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+
+      if (response.ok) {
+          const updatedLists = lists.filter((_, index) => index !== listIndex);
+          setLists(updatedLists);
+      }
+  } catch (error) {
+      console.error("Error:", error);
+  }
   };
 
   const handleSubmit = (e) => {
