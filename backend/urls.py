@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path 
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
-from .views import get_workspaces, get_boards , create_board, get_lists , create_list, get_lists_by_board,get_list_by_id,get_cards_by_list,delete_list,get_users
+from .views import get_workspaces, get_boards , create_board, get_lists , create_list, get_lists_by_board,get_list_by_id,get_cards_by_list,delete_list,get_users,get_users_id
 
 '''path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),'''
@@ -28,10 +28,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/login/', views.login),  # Agregar 'api/' para seguir una estructura RESTful
     path('api/register/', views.register),
-    path('api/users/',get_users , name='list_users'),  # Para listar todos los workspaces
+    path('api/users/',get_users , name='list_users'),  # Para listar todos los workspaces 
     path('api/save_workspace/', views.create_workspace), #crear workspace
     path('api/workspace/', get_workspaces, name='list_workspaces'),  # Para listar todos los workspaces
     path('api/workspace/<int:workspace_id>/', get_workspaces, name='get_workspace_by_id'),  # Para obtener uno específico
+    path('api/workspaces/<int:workspace_id>/users/', get_users_id, name='get-workspace-users'),
     path('api/boards/', get_boards, name='list_boards'),  # Para listar todos los boards
     path('api/boards/<int:board_id>/', get_boards, name='get_board_by_id'),  # Para obtener un board específico
     path('api/boards/create/', create_board, name='create_board'),  # Para crear un nuevo board

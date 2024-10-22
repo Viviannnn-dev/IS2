@@ -7,9 +7,7 @@ import { useWorkspace } from '../context/WorkspaceContext';
 
 const AddBoardForm = ({ onAddBoard, onClose }) => {
   const { workspace } = useWorkspace();
-  console.log('WORKSPACE');
-  console.log(workspace);
-  console.log(workspace.id);
+ 
 
   const [boardName, setBoardName] = useState('');
 

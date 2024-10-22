@@ -9,6 +9,24 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Workspace,Board,List,Card, Task
 
 @api_view(['GET'])
+@permission_classes([AllowAny])  # Permitir acceso a cualquier usuario
+def get_users_id(request, workspace_id):
+    if request.method == 'GET':
+        try:
+            # Obtener el workspace por ID
+            workspace = Workspace.objects.get(id=workspace_id)
+            users = workspace.users.all()  # Obtener los usuarios asociados al workspace
+            serializer = UserSerializer(users, many=True)  # Serializar los usuarios
+
+            print(serializer.data)  # Depuración: Imprimir los datos serializados
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Workspace.DoesNotExist:
+            return Response({'error': 'Workspace no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response({'error': 'Método no permitido'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+@api_view(['GET'])
 @permission_classes([AllowAny])
 def get_users(request):
     if request.method == 'GET':

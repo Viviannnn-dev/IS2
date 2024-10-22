@@ -3,16 +3,19 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './cardDetailModal.css';
+import { useWorkspace } from '../context/WorkspaceContext';
 import { useLists } from '../context/ListContext';
 
-const CardDetailModal = ({ show, onHide, card , onCardUpdate}) => {
+const CardDetailModal = ({ show, onHide, card }) => {
     console.log(card.id);
     const { lists } = useLists();
+    const { workspace } = useWorkspace();
     const [selectedColor, setSelectedColor] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [tasks, setTasks] = useState([]);
     const [showTasks, setShowTasks] = useState(false); // Estado para controlar la visibilidad de la lista de tareas
-    
+    const [users, setUsers] = useState([]); // Para almacenar los usuarios
+
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     const yesterday = new Date();
@@ -74,17 +77,6 @@ const CardDetailModal = ({ show, onHide, card , onCardUpdate}) => {
         creationDate: '', // Fecha de creación
     });
 
-    useEffect(() => {
-        if (show && card) {
-            setFormData({
-                name: card.name,
-                description: card.description,
-                dueDate: card.dueDate,
-                selectedList: card.listId, // Id de la lista actual de la tarjeta
-            });
-        }
-    }, [show, card]);
-
     const colorMapping = {
         '#ffb3d9': 1,
         '#add8e6': 2,
@@ -92,6 +84,24 @@ const CardDetailModal = ({ show, onHide, card , onCardUpdate}) => {
         '#ffcc99': 4,
     };
     
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/workspaces/${workspace.id}/users/`); // Ajusta la URL según tu API
+                if (response.ok) {
+                    const data = await response.json();
+                    setUsers(data); // Supongo que el formato es un array de usuarios
+                    console.log(data);
+                } else {
+                    console.error('Error fetching users:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+        fetchUsers();
+    }, [workspace.id]); // Solo se ejecuta cuando cambia el ID del workspace
+ 
 
     useEffect(() => {
         const fetchCardData = async () => {
@@ -169,7 +179,6 @@ const CardDetailModal = ({ show, onHide, card , onCardUpdate}) => {
             if (response.ok) {
                 const updatedCard = await response.json();
                 console.log('Card updated successfully:', updatedCard);
-                onCardUpdate(updatedCard); // Llamar a la función del componente padre
                 onHide(); // Cerrar el modal
             } else {
                 const errorData = await response.json();
@@ -225,13 +234,18 @@ const CardDetailModal = ({ show, onHide, card , onCardUpdate}) => {
                     </Form.Group>
                     <Form.Group className="mb-2" controlId="usuario">
                         <Form.Label>Usuario Asignado</Form.Label>
-                        <Form.Control
-                            type="text"
-                            className="form-control-sm"
+                        <Form.Select
                             name="assignedUser"
                             value={formData.assignedUser}
                             onChange={handleChange}
-                        />
+                        >
+                            <option value="">Selecciona un usuario</option>
+                            {users.map(user => (
+                                <option key={user.id} value={user.id}>
+                                    {user.username} {/* Asegúrate de que el nombre del campo coincida con tu API */}
+                                </option>
+                            ))}
+                        </Form.Select>
                     </Form.Group>
                     <Form.Group className="mb-2" controlId="etiqueta">
     <Form.Label>Etiqueta</Form.Label>
