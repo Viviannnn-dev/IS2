@@ -35,8 +35,16 @@ const CardDetailModal = ({ show, onHide, card }) => {
         status: 'open',
         dueDate: new Date().toISOString().split('T')[0]    });
 
-    const handleShowModal = () => setShowModal(true);
-    const handleCloseModal = () => {
+    const handleShowModal = () => {
+            setFormDataTask({ // Restablecer los valores vacíos
+                name: '',
+                description: '',
+                status: 'open',
+                dueDate: new Date().toISOString().split('T')[0]
+            });
+            setShowModal(true);
+        };
+            const handleCloseModal = () => {
         setShowModal(false);
         setShowTasks(false); // Limpiar la visibilidad de la lista de tareas al cerrar el modal
     };
@@ -55,16 +63,46 @@ const CardDetailModal = ({ show, onHide, card }) => {
         setShowTasks(!showTasks); // Alternar la visibilidad de la lista de tareas
     };
 
-    const handleSaveTask = () => {
+    const handleSaveTask = async () => {
         // Verificar que ningún campo esté vacío
         if (!formDataTask.name || !formDataTask.description || !formDataTask.status || !formDataTask.dueDate) {
             setErrorMessage('Por favor, complete todos los campos.');
             return; // Detener la ejecución si hay campos vacíos
         }
-        handleCloseModal();
-        setTasks([...tasks, formDataTask]);
-        setFormDataTask({ description: '', status: 'open', dueDate: '' });
-        
+    
+        // Crear el objeto para enviar, incluyendo card.id
+        const taskData = {
+            name: formDataTask.name,
+            description: formDataTask.description,
+            status: formDataTask.status,
+            due_date: formDataTask.dueDate,
+            card: card.id // Asociar la tarea con el ID de la tarjeta
+        };
+    
+        try {
+            const response = await fetch(`http://localhost:8000/api/tasks/create/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(taskData),
+            });
+    
+            if (response.ok) {
+                const newTask = await response.json();
+                console.log('Task created successfully:', newTask);
+                // Actualizar la lista de tareas y cerrar el modal
+                setTasks([...tasks, newTask]);
+                handleCloseModal();
+            } else {
+                const errorData = await response.json();
+                console.error('Failed to create task:', errorData);
+                setErrorMessage('Error al crear la tarea. Inténtelo de nuevo.');
+            }
+        } catch (error) {
+            console.error('Error creating task:', error);
+            setErrorMessage('Error al crear la tarea. Inténtelo de nuevo.');
+        }
     };
     
     const [formData, setFormData] = useState({
@@ -139,6 +177,26 @@ const CardDetailModal = ({ show, onHide, card }) => {
     
         fetchCardData();
     }, [show, card]);
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            if (card && card.id) {
+                try {
+                    const response = await fetch(`http://localhost:8000/api/tasks/card/${card.id}/`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setTasks(data); // Supone que `data` es un array de tareas
+                        console.log(data);
+                    } else {
+                        console.error('Error fetching tasks:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error fetching tasks:', error);
+                }
+            }
+        };
+        fetchTasks();
+    }, [card]);
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -188,7 +246,6 @@ const CardDetailModal = ({ show, onHide, card }) => {
             console.error('Error updating card:', error);
         }
     };
-    
 
     const selectStyle = {
         backgroundColor: selectedColor || 'white',
@@ -248,27 +305,27 @@ const CardDetailModal = ({ show, onHide, card }) => {
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className="mb-2" controlId="etiqueta">
-    <Form.Label>Etiqueta</Form.Label>
-    <Form.Select
-        style={selectStyle}
-        name="label"
-        value={selectedColor} // Mantiene el color seleccionado directamente
-        onChange={(e) => {
-            const color = e.target.value;
-            const numericValue = colorMapping[color]; // Obtiene el valor numérico correspondiente
-            setSelectedColor(color);
-            setFormData((prevData) => ({
-                ...prevData,
-                label: numericValue || '', // Guarda el valor numérico
-            }));
-        }}
-    >
-        <option value="" style={{ backgroundColor: 'white', color: 'black' }}>Seleccione una opción</option>
-        {Object.keys(colorMapping).map(color => (
-            <option key={color} value={color} style={{ backgroundColor: color }}></option>
-        ))}
-    </Form.Select>
-</Form.Group>
+                        <Form.Label>Etiqueta</Form.Label>
+                        <Form.Select
+                            style={selectStyle}
+                            name="label"
+                            value={selectedColor} // Mantiene el color seleccionado directamente
+                            onChange={(e) => {
+                                const color = e.target.value;
+                                const numericValue = colorMapping[color]; // Obtiene el valor numérico correspondiente
+                                setSelectedColor(color);
+                                setFormData((prevData) => ({
+                                    ...prevData,
+                                    label: numericValue || '', // Guarda el valor numérico
+                                }));
+                            }}
+                        >
+                            <option value="" style={{ backgroundColor: 'white', color: 'black' }}>Seleccione una opción</option>
+                            {Object.keys(colorMapping).map(color => (
+                                <option key={color} value={color} style={{ backgroundColor: color }}></option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
                     <Form.Group className="mb-2" controlId="estado">
                         <Form.Label>Estado</Form.Label>
                         <Form.Select
@@ -300,11 +357,11 @@ const CardDetailModal = ({ show, onHide, card }) => {
                     ) : (
                         tasks.map((task, index) => {
                             // Convertir la fecha de vencimiento a un objeto Date
-                            const [year, month, day] = task.dueDate.split('-').map(Number);
+                            const [year, month, day] = task.due_date.split('-').map(Number);
                             const dueDate = new Date(year, month - 1, day); // Crea la fecha en medianoche local
                             
 
-                            console.log(task.dueDate)
+                            console.log(task.due_date)
 
 
                             // Determinar la clase según la fecha de vencimiento
@@ -322,7 +379,7 @@ const CardDetailModal = ({ show, onHide, card }) => {
                                     <p>Nombre: {task.name}</p>
                                     <p>Descripción: {task.description}</p>
                                     <p>Estado: {task.status}</p>
-                                    <p>Fecha de Vencimiento: {task.dueDate}</p>
+                                    <p>Fecha de Vencimiento: {task.due_date}</p>
                                 </div>
                             );
                         })
@@ -338,10 +395,6 @@ const CardDetailModal = ({ show, onHide, card }) => {
             <span class="box-defeated"></span>
             <span class="label">Vencido</span>
         </div>
-
-
-
-
             <Modal className='modal-task' show={showModal} onHide={handleCloseModal}>
                 <Modal.Header className='modal-header-task' closeButton>
                     <Modal.Title className=''>Añadir Tarea</Modal.Title>

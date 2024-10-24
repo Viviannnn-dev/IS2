@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path 
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
-from .views import get_workspaces, get_boards , create_board, get_lists , create_list, get_lists_by_board,get_list_by_id,get_cards_by_list,delete_list,get_users,get_users_id
+from .views import get_workspaces, get_boards , create_board, get_lists , create_list, get_lists_by_board,get_list_by_id,get_cards_by_list,delete_list,get_users,get_users_id,get_tasks_by_card
 
 '''path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),'''
@@ -48,6 +48,7 @@ urlpatterns = [
     path('api/tasks/', views.get_tasks, name='get_tasks'),# Para listar todas las tareas
     path('api/tasks/create/', views.create_task, name='create_task'), # Para crear una nueva tarea
     path('api/tasks/<int:task_id>/', views.get_tasks, name='get_task'),  # Para obtener una tarea específica
+    path('api/tasks/card/<int:card_id>/', get_tasks_by_card, name='get_tasks_by_card'),
     path('api/workspace-update/<int:workspace_id>/', views.update_workspace, name='update_workspace'),
     path('api/board-update/<int:board_id>/', views.update_board, name='update_board'),
     path('api/list-update/<int:list_id>/', views.update_list, name='update_list'),

@@ -254,6 +254,18 @@ def get_tasks(request, task_id=None):
         serializer = TaskSerializer(tasks, many=True)  # Serializa la lista de tareas
         return Response(serializer.data, status=status.HTTP_200_OK)  # Devuelve la lista de tareas
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_tasks_by_card(request, card_id):
+    # Filtra las tareas asociadas al card_id proporcionado
+    tasks = Task.objects.filter(card_id=card_id)
+    if tasks.exists():
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'No hay tareas asociadas a esta tarjeta.'}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])  
 def create_task(request):

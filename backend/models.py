@@ -61,7 +61,7 @@ class Task(models.Model):
         default='open'
     )
     alert = models.BooleanField(default=False)  # Cambiado a BooleanField con valor por defecto
-    due_date = models.DateField()  # Cambiado a DateField en inglés
+    due_date = models.DateField() 
     card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='tasks')
 
     def __str__(self):
