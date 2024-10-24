@@ -5,17 +5,18 @@ from .models import Workspace, Board, List, Card, Task
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','username', 'email', 'password']  # Asegúrate de incluir 'email' en los campos
-        extra_kwargs = {'password': {'write_only': True}} # Agrega otros campos que necesites
+        fields = ['id', 'username', 'email', 'password']  # Incluye 'email' en los campos
+        extra_kwargs = {'password': {'write_only': True}}  # La contraseña solo se puede escribir
 
     def create(self, validated_data):
-        user = User(**validated_data)
-        user.set_password(validated_data['password'])  # Asegúrate de encriptar la contraseña
+        email = validated_data.get('email')  # Obtener email o None
+        user = User(username=validated_data['username'], email=email)  # Crear usuario
+        user.set_password(validated_data['password'])  # Encriptar la contraseña
         user.save()
         return user
 
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+        if value and User.objects.filter(email=value).exists():  # Solo verificar si hay valor
             raise serializers.ValidationError("Este email ya está en uso.")
         return value
 

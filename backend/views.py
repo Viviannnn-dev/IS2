@@ -73,11 +73,8 @@ def register(request):
         email = serializer.validated_data.get('email')
         password = serializer.validated_data.get('password')
 
-        if email is None:
-            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
-
         # Crear el usuario manualmente
-        user = User(username=username, email=email)
+        user = User(username=username, email=email) if email else User(username=username)
         user.set_password(password)  # Encriptar la contraseña
         user.save()
 

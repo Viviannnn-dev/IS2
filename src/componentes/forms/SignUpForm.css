@@ -20,7 +20,7 @@
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     
-    h2 {
+    .sign-up-content h2 {
       text-align: center;
       font-family: "Poppins", sans-serif;
       padding-top: 0%;
@@ -29,11 +29,29 @@
       font-size: 15px; 
     }
     
-    .form-tablero {
-      color: rgba(240, 248, 255, 0.678);
-      font-size: 14px;
-     font-family: "Poppins", sans-serif;
-     margin-bottom: -41px !important; /* Reduce el espacio entre los campos del formulario */
-
+    .sign-up-content .form-tablero {
+        color: rgba(240, 248, 255, 0.678);
+        font-size: 14px;
+       font-family: "Poppins", sans-serif;
+       margin-bottom: -41px !important; /* Reduce el espacio entre los campos del formulario */
     }
     
+    .custom-btn {
+        font-size: 12px; /* Tamaño de fuente más pequeño */
+        width: min-content; /* Ajusta el ancho del botón */
+        height: 30px; /* Altura del botón */
+        border: 1px solid rgba(240, 248, 255, 0.678); /* Borde opcional */
+        background-color: transparent; /* Fondo transparente */
+        color: rgba(240, 248, 255, 0.678); /* Color del texto */
+        transition: background-color 0.3s; /* Transición suave para el fondo */
+        display: flex; /* Usar flexbox para centrar */
+        justify-content: center; /* Centrar horizontalmente */
+        align-items: center; /* Centrar verticalmente */
+        padding: 0; /* Eliminar padding para que el tamaño sea más controlado */
+    }
+    
+      
+      .custom-btn:hover {
+        background-color: rgba(240, 248, 255, 0.2); /* Cambia el fondo al pasar el mouse */
+      }
+      
