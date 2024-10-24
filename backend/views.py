@@ -114,6 +114,23 @@ def get_workspaces(request, workspace_id=None):
         return Response(serializer.data, status=status.HTTP_200_OK)  # Devuelve la lista de workspaces
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
+def get_boards_by_workspace(request, workspace_id):
+    try:
+        # Obtener el workspace
+        workspace = Workspace.objects.get(id=workspace_id)
+        
+        # Obtener los boards relacionados con el workspace
+        boards = workspace.boards.all()  # Usando el related_name 'boards'
+        
+        # Serializar los boards
+        serializer = BoardSerializer(boards, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Workspace.DoesNotExist:
+        return Response({'error': 'Workspace not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['GET'])
 @permission_classes([AllowAny])  # Cambia a IsAuthenticated si deseas restringir el acceso
 def get_boards(request, board_id=None):
     if board_id is not None:

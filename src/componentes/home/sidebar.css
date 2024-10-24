@@ -1,5 +1,3 @@
-   
-
 .sidebar {
   background-color: #333; /* Color de fondo oscuro */
   color: #fff; /* Color de texto blanco */
@@ -23,21 +21,19 @@
   padding: 10px;
 }
 
-.add-board-button {
-  background-color: #007bff; /* Color de fondo del botón (azul) */
+.button-task {
+  background: none; /* Sin fondo */
   border: none; /* Sin borde */
-  color: white; /* Color del texto del botón */
-  padding: 10px; /* Espaciado interno */
-  margin: 10px 0; /* Margen vertical */
+  color: #ffffffbc; /* Color del texto */
   cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
-  border-radius: 5px; /* Esquinas redondeadas */
-  flex-shrink: 0; /* Evita que el botón se encoja en el contenedor flex */
-  transition: background-color 0.3s; /* Transición suave para el color de fondo */
+  font-weight: bold; /* Texto en negrita */
+  padding: 8px 0; /* Espaciado vertical */
+  text-align: left; /* Alinear el texto a la izquierda */
+  padding-left: 10px !important ;
 }
 
-/* Efecto de hover */
-.add-board-button:hover {
-  background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+.button-task:hover {
+  text-decoration: underline; /* Subrayar al pasar el mouse */
 }
 
 .user-button {
@@ -54,5 +50,23 @@
 .user-icon {
   font-size: 24px; /* Tamaño del icono */
 }
- 
 
+.board-button {
+  background: none; /* Sin fondo */
+  border: none; /* Sin borde */
+  color: #ffffffbc; /* Color de texto blanco */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+  padding: 8px 0; /* Espaciado vertical */
+  text-align: left; /* Alinear el texto a la izquierda */
+  padding-left: 10px !important ;
+}
+
+.board-button:hover {
+  text-decoration: underline; /* Subrayar al pasar el mouse */
+}
+
+.task-list {
+  display: flex; /* Usar flexbox */
+  flex-direction: column; /* Colocar los elementos en columna */
+  margin-top: 10px; /* Espacio entre el botón y la lista de tableros */
+}
