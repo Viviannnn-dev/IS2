@@ -106,11 +106,30 @@ const Board = ({ id, name, description }) => {
     setExceededCardIndex(null);
   };
 
-  const renameList = (listIndex, newName) => {
+  const renameList = async (listIndex, newName) => {
     const updatedLists = [...lists];
+    const listId = updatedLists[listIndex].id;
     updatedLists[listIndex].name = newName; // Actualizar el nombre de la lista
-    setLists(updatedLists); // Guardar el nuevo estado
-  };
+      try {
+        const response = await fetch(`http://localhost:8000/api/list-update/${listId}/`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: newName }), // Envía el nuevo nombre al backend
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Nombre de la lista actualizado con éxito:', data);
+          setLists(updatedLists); // Actualiza el estado con el nuevo nombre
+        } else {
+          console.error('Error al actualizar el nombre de la lista');
+        }
+      } catch (error) {
+        console.error("Error en la solicitud", error);
+      }
+    };
 
   const deleteList =async (listIndex) => {
     const updatedLists = lists.filter((_, index) => index !== listIndex);
