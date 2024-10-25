@@ -15,6 +15,11 @@ const Home = ({ user }) => {
     setShowForm(false); // Cerrar el formulario
   };
 
+  const handleBoardSelect = (board) => {
+    setCurrentBoard(board); // Actualizar con el tablero seleccionado
+  };
+
+
   const toggleFormVisibility = () => setShowForm(!showForm);
 
   // Función para alternar la visibilidad del modal de registro
@@ -48,7 +53,7 @@ const Home = ({ user }) => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-2 sidebar"> 
-          <Sidebar showForm={showForm} onToggleForm={toggleFormVisibility} onToggleSignUp={toggleSignUpVisibility} />
+          <Sidebar showForm={showForm} onToggleForm={toggleFormVisibility} onToggleSignUp={toggleSignUpVisibility} onBoardSelect={handleBoardSelect} />
         </div>
 
         <div className={`col-md-10 board-area ${currentBoard ? 'board-color' : ''}`}>

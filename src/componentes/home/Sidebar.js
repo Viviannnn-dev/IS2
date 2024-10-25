@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { useWorkspace } from '../context/WorkspaceContext';
 
-const Sidebar = ({ showForm, onToggleForm, onToggleSignUp }) => {
+const Sidebar = ({ showForm, onToggleForm, onToggleSignUp,onBoardSelect }) => {
   const { workspace } = useWorkspace();
   const [showBoards, setShowBoards] = useState(false);
   const [boards, setBoards] = useState([]);
@@ -35,6 +35,10 @@ const Sidebar = ({ showForm, onToggleForm, onToggleSignUp }) => {
     }
   }, [showBoards]);
 
+  const handleBoardClick = (board) => {
+    onBoardSelect(board); // Llamar la función proporcionada por el componente padre
+  };
+
   return (
     <div className="sidebar">
       <div className="add-board">
@@ -47,18 +51,21 @@ const Sidebar = ({ showForm, onToggleForm, onToggleSignUp }) => {
       </button>
       {/* Mostrar la lista de tableros */}
       {showBoards && (
-        <div className="task-list">
-          {boards.length === 0 ? (
-            <p>No existen tableros.</p>
-          ) : (
-            boards.map((board) => (
-              <button key={board.id} className="board-button">
+      <div className="task-list">
+        {boards.length === 0 ? (
+          <p>No existen tableros.</p>
+        ) : (
+          boards.map((board) => (
+            <li key={board.id} onClick={() => handleBoardClick(board)} style={{ listStyleType: 'none' }}>
+              <button className="board-button">
                 {board.name}
               </button>
-            ))
-          )}
-        </div>
-      )}
+            </li>
+          ))
+        )}
+      </div>
+    )}
+
       {/* Botón de usuario */}
       <button className="user-button" onClick={onToggleSignUp}>
         <FontAwesomeIcon icon={faUser} className="user-icon" />

@@ -27,9 +27,9 @@
   color: #ffffffbc; /* Color del texto */
   cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
   font-weight: bold; /* Texto en negrita */
-  padding: 8px 0; /* Espaciado vertical */
   text-align: left; /* Alinear el texto a la izquierda */
   padding-left: 10px !important ;
+  padding: none;
 }
 
 .button-task:hover {
