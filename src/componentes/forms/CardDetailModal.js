@@ -6,7 +6,7 @@ import './cardDetailModal.css';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { useLists } from '../context/ListContext';
 
-const CardDetailModal = ({ show, onHide, card }) => {
+const CardDetailModal = ({ show, onHide, card, onCardUpdate }) => {
     console.log(card.id);
     const { lists } = useLists();
     const { workspace } = useWorkspace();
@@ -156,7 +156,7 @@ const CardDetailModal = ({ show, onHide, card }) => {
                             name: data.name || '',
                             description: data.description || '',
                             dueDate: data.due_date || '',
-                            assignedUser: 'Ruth',
+                            assignedUser: '',
                             label: colorKey ? colorMapping[colorKey] : '', // Guarda el valor numérico
                             selectedList: '',
                             creationDate: data.creationDate || new Date().toISOString().split('T')[0],
@@ -238,6 +238,8 @@ const CardDetailModal = ({ show, onHide, card }) => {
                 const updatedCard = await response.json();
                 console.log('Card updated successfully:', updatedCard);
                 onHide(); // Cerrar el modal
+                console.log('se activo en cardDetail');
+                onCardUpdate(); // Llamar al callback para actualizar las listas en el Board
             } else {
                 const errorData = await response.json();
                 console.error('Failed to update card:', errorData);

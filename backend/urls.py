@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path 
 #from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
-from .views import get_workspaces, get_boards , create_board, get_lists , create_list, get_lists_by_board,get_list_by_id,get_cards_by_list,delete_list,get_users,get_users_id,get_tasks_by_card,get_boards_by_workspace
+from .views import get_workspaces, get_boards , create_board, get_lists , create_list, get_lists_by_board,get_list_by_id,get_cards_by_list,delete_list,get_users,get_users_id,get_tasks_by_card,get_boards_by_workspace,get_tasks_by_board,get_tasks_by_board_and_user
 
 '''path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),'''
@@ -55,7 +55,9 @@ urlpatterns = [
     path('api/list-update/<int:list_id>/', views.update_list, name='update_list'),
     path('api/card-update/<int:card_id>/', views.update_card, name='update_card'),
     path('api/task-update/<int:task_id>/', views.update_task, name='update_task'),
-
+    path('api/board/<int:board_id>/tasks/', views.get_tasks_by_board, name='get_tasks_by_board'),
+    path('api/board/<int:board_id>/users/<int:user_id>/tasks/', views.get_tasks_by_board_and_user, name='get_tasks_by_board_and_user')
+    
 ]
 
 

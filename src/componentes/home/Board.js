@@ -14,7 +14,6 @@ const Board = ({ id, name, description }) => {
   const [smShow, setSmShow] = useState(false); // Estado del modal pequeño
   const [exceededListIndex, setExceededListIndex] = useState(null); // Para rastrear qué lista excedió el límite
   const [exceededCardIndex, setExceededCardIndex] = useState(null); // Para rastrear qué tarjeta excedió el límite
-
   const listsContainerRef = useRef(null);
 
   
@@ -23,22 +22,27 @@ const Board = ({ id, name, description }) => {
 
   // UseEffect para obtener las listas del tablero al cargar el componente
   useEffect(() => {
-    const fetchLists = async () => {
-      try {
-        console.log("id:", id);
+    fetchLists(); // Llama a fetchLists cuando el componente se monte o cambie el ID
+  }, [id]);
+  
+  const fetchLists = async () => {
+    try {
+      console.log("id:", id);
+      const response = await fetch(`http://localhost:8000/api/lists/board/${id}/`);
+      const data = await response.json();
+      setLists(data);
+      console.log("Listas obtenidas:", data);
+      console.log(lists);
+    } catch (error) {
+      console.error("Error al obtener las listas:", error);
+    }
+  };
 
-        const response = await fetch(`http://localhost:8000/api/lists/board/${id}/`);      
-        const data = await response.json();
-        setLists(data);
-        console.log("Listas obtenidas:", data);
-        console.log(lists);
-      } catch (error) {
-        console.error("Error al obtener las listas:", error);
-      }
-    };
-
+  const onCardList = () => {
+    console.log('llamo para q vuelva a cargar las tarjetas de las listas')
     fetchLists();
-  }, [id]); // Se ejecuta cuando el ID del tablero cambia
+  };
+  
 
   //nombre de las listas
   const getListNames = () => {
@@ -161,7 +165,8 @@ const Board = ({ id, name, description }) => {
       <div className="lists-container" ref={listsContainerRef}>
         <div className="lists">
           {lists.map((list, index) => (
-            <List key={index} list={list} listIndex={index} onRenameList={renameList} onDeleteList={deleteList} listNames={getListNames()} />
+            <List key={index} list={list} listIndex={index} onRenameList={renameList} onDeleteList={deleteList} listNames={getListNames()} onCardList={onCardList} // Pasar la función de actualización de tarjeta
+            />
           ))}
           <div className="add-list-container">
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>

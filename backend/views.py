@@ -356,3 +356,32 @@ def delete_list(request, list_id):
     list_instance.delete()
     
     return Response({"message": "Lista eliminada con éxito."}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])  # Cambia a IsAuthenticated si solo usuarios autenticados pueden acceder
+def get_tasks_by_board(request, board_id):
+    # Filtrar tareas que pertenecen al board dado
+    try:
+        board = Board.objects.get(id=board_id)
+    except Board.DoesNotExist:
+        return Response({"error": "Board no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
+    tasks = Task.objects.filter(card__list__board=board)
+    serializer = TaskSerializer(tasks, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])  # Cambia a IsAuthenticated si solo usuarios autenticados pueden acceder
+def get_tasks_by_board_and_user(request, board_id, user_id=None):
+    label = request.query_params.get('label')  # Obtén el parámetro de la etiqueta
+    if user_id:
+        tasks = Task.objects.filter(card__list__board_id=board_id, card__owner_id=user_id)
+    else:
+        tasks = Task.objects.filter(card__list__board_id=board_id)
+    
+    if label:  # Filtrar por label si está presente
+        tasks = tasks.filter(card__label=label)
+    
+    serializer = TaskSerializer(tasks, many=True)
+    return Response(serializer.data)

@@ -51,7 +51,7 @@ function Workspace({ user }) {
     axios.post(`http://localhost:8000/api/save_workspace/`, formData)
       .then(response => {
         setWorkspace(response.data);
-        navigate('/home');
+        navigate('/home', { state: { users } });  // Aquí pasas `user` a `Home`
       })
       .catch(error => console.error('Error al crear workspace:', error));
   };
@@ -60,7 +60,7 @@ function Workspace({ user }) {
   const handleWorkspaceClick = (workspace) => {
     setWorkspace(workspace);
     console.log(workspace);
-    navigate('/home');
+    navigate('/home', { state: { users } });  // Aquí pasas `user` a `Home`
   };
 
   return (

@@ -161,3 +161,10 @@
     color: white !important;
 }
   
+.board-header .filter-options {
+    display: inline-flex; /* Esto asegurará que los filtros estén en línea */
+    align-items: center; /* Alinear verticalmente los filtros con el header */
+    margin-left: 20px !important; /* Espacio entre el título y los filtros */
+    font-weight: normal;
+  }
+  

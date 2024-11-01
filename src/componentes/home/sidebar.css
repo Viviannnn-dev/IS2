@@ -29,7 +29,7 @@
   font-weight: bold; /* Texto en negrita */
   text-align: left; /* Alinear el texto a la izquierda */
   padding-left: 10px !important ;
-  padding: none;
+  padding: none !important;
 }
 
 .button-task:hover {

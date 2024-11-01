@@ -4,7 +4,7 @@ import Card from './Card';
 import AddButton from '../button/AddButton';
 import Modal from 'react-bootstrap/Modal'; // Importar Modal de Bootstrap
 
-const List = ({ list, listIndex, onRenameList, onDeleteList,onCardMoved }) => {
+const List = ({ list, listIndex, onRenameList, onDeleteList,onCardMoved, onCardList }) => {
   const [newCardName, setNewCardName] = useState('');
   const [showAddButton, setShowAddButton] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -13,14 +13,18 @@ const List = ({ list, listIndex, onRenameList, onDeleteList,onCardMoved }) => {
   const [error, setError] = useState('');const [showErrorModal, setShowErrorModal] = useState(false); 
   const [errorCardId, setErrorCardId] = useState(null); //
 
-
   useEffect(() => {
-    const fetchCards = async () => {
+    fetchCards(); // Llama a fetchLists cuando el componente se monte o cambie el ID
+  }, [list.id]);
+  
+
+  const fetchCards = async () => {
       try {
         const response = await fetch(`http://localhost:8000/api/lists/cards/${list.id}/`);
         if (response.ok) {
           const data = await response.json();
           setCards(data);
+          onCardList();
         } else {
           console.error('Error al obtener las tarjetas:', response.statusText);
         }
@@ -29,22 +33,12 @@ const List = ({ list, listIndex, onRenameList, onDeleteList,onCardMoved }) => {
       }
     };
 
+    
+  const onCardUpdate = () => {
+    console.log('llamo para q vuelva a cargar las tarjetas')
     fetchCards();
-  }, [list.id]);
-
-  const handleCardUpdate = (updatedCard) => {
-    if (updatedCard.listId === list.id) {
-        // Si la tarjeta sigue en la misma lista, actualizar
-        setCards((prevCards) =>
-            prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
-        );
-    } else {
-        // Si la tarjeta ha cambiado de lista, eliminar de esta lista
-        setCards((prevCards) => prevCards.filter((card) => card.id !== updatedCard.id));
-        // Llamar a la función para mover la tarjeta a otra lista
-        onCardMoved(updatedCard);
-    }
-};
+  };
+  
 
 const handleCardMoved = (updatedCard, newListId) => {
   onCardMoved(updatedCard, newListId);
@@ -143,7 +137,7 @@ const handleCardMoved = (updatedCard, newListId) => {
               key={card.id}
               card={card}
               error={isLimitExceeded ? 'card-limit-exceeded' : ''}
-              onCardUpdate={handleCardUpdate}
+              onCardUpdate={onCardUpdate} // Pasar la función de actualización de tarjeta
               onMoveCard={handleCardMoved} // Pasar la función para mover tarjeta
 
             />

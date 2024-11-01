@@ -30,7 +30,115 @@
   margin: -12px;
   padding: 5px 20px;
   display: flex;
-  align-items: flex-start; /* Alinea el texto en la parte superior */
+  align-items: center; /* Alinea el texto en la parte superior */
   border-bottom: 2px solid rgba(204, 204, 204, 0.801);
+  justify-content: space-between; /* Espacio entre los elementos */
+
 }
 
+.filter-options {
+  display: inline-block; /* Esto permite que los filtros se alineen horizontalmente */
+  margin-left: 20px; /* Espacio entre el título y los filtros */
+  vertical-align: middle; /* Alinea verticalmente con el texto del título */
+}
+
+.filter-options label {
+  margin-right: 15px; /* Espacio entre los filtros */
+}
+
+
+.modal-header-task{
+  height: 30px;
+  background-color: #333 ;
+  font-size: 5px;
+
+}
+
+.modal-task .modal-body{
+  background-color: #333;
+}
+
+.modal-task{
+  height: 400px !important;
+  font-size: 13px !important;
+}
+
+
+.modal-task .footer-task{
+  height: 10;
+  background-color: #333;
+}
+
+.modal-task .custom-margin{
+  margin-top: -14px !important;
+}
+
+.modal-task .form-label{
+  color: rgba(240, 248, 255, 0.678) !important;
+}
+
+.modal-task .modal-content{
+  margin: 0 auto;
+  width: 80%;
+  margin-top: 0%;
+}
+
+.task-home .task-list {
+  display: flex;
+  justify-content: flex-end; /* Espacia los elementos en la línea */
+  flex-direction: row-reverse
+}
+
+.task-item {
+  width: 48%; /* Ocupar aproximadamente la mitad del contenedor */
+  margin-bottom: 20px; /* Espacio entre las filas */
+  border: 1px solid #ccc; /* Añadir borde opcional para ver los límites de cada tarea */
+  padding: 10px; /* Espacio interno en cada tarea */
+  box-sizing: border-box; /* Asegúrate de que el padding y el border no afecten el ancho */
+  background-color: #3333331b !important;
+  border-radius: 10px;
+}
+
+.task-item p, .late p, .defeated p {
+  font-size: 12.5px;
+  line-height: 1;
+}
+
+
+.task-home .late {
+  width: 28%; 
+  background-color: #cd87b257 !important; /* Color de fondo para tareas atrasadas */
+  padding: 10px; /* Espaciado interno */
+  margin-bottom: 20px; /* Espaciado entre tareas */
+  box-sizing: border-box; 
+  border-radius: 10px;
+}
+
+.task-home  .defeated {
+  width: 28%; 
+  background-color: #e17272; /* Color de fondo para tareas no atrasadas */
+  color: hsl(0, 0%, 99%); /* Color de texto para tareas no atrasadas */
+  padding: 10px; /* Espaciado interno */
+  margin-bottom: 20px; /* Espaciado entre tareas */
+  box-sizing: border-box; 
+  border-radius: 10px;
+}
+
+.color-box {
+  display: flex;
+  align-items: center; /* Centra verticalmente el contenido */
+}
+
+.box-late {
+  width: 10px; /* Ajusta el tamaño del cuadrado */
+  height: 10px; /* Ajusta el tamaño del cuadrado */
+  background-color: #cd87b257; /* Cambia el color aquí */
+  margin-right: 5px; /* Espacio entre el cuadrado y la palabra */
+}
+
+.box-defeated {
+  width: 10px; /* Ajusta el tamaño del cuadrado */
+  height: 10px; /* Ajusta el tamaño del cuadrado */
+  background-color: #e17272; /* Cambia el color aquí */
+  margin-right: 5px; /* Espacio entre el cuadrado y la palabra */
+}

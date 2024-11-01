@@ -19,6 +19,7 @@ const Card = ({ card, error , onCardUpdate, onMoveCard }) => {
         card={card}
         onCardUpdate={onCardUpdate} // Pasar la función de actualización de tarjeta
         onMoveCard={onMoveCard} // Pasar la función de mover tarjeta
+    
       />
     </>
   );
