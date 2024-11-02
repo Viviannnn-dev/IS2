@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { useLists } from '../context/ListContext';
 
-const Board = ({ id, name, description }) => {
+const Board = ({ id, name, description ,reloadTasks}) => {
   const { lists, setLists } = useLists();
   const [newListName, setNewListName] = useState('');
   const [newLimit, setNewLimit] = useState('');
@@ -165,7 +165,7 @@ const Board = ({ id, name, description }) => {
       <div className="lists-container" ref={listsContainerRef}>
         <div className="lists">
           {lists.map((list, index) => (
-            <List key={index} list={list} listIndex={index} onRenameList={renameList} onDeleteList={deleteList} listNames={getListNames()} onCardList={onCardList} // Pasar la función de actualización de tarjeta
+            <List key={index} list={list} listIndex={index} reloadTasks={reloadTasks} onRenameList={renameList} onDeleteList={deleteList} listNames={getListNames()} onCardList={onCardList} // Pasar la función de actualización de tarjeta
             />
           ))}
           <div className="add-list-container">
@@ -181,7 +181,7 @@ const Board = ({ id, name, description }) => {
                 type="number"
                 value={newLimit}
                 onChange={handleInputChange2}
-                placeholder="Añade el limite de tareas"
+                placeholder="Añade limite de tarjetas"
                 className="form-list"
               />
               {showAddButton && (

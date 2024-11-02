@@ -6,7 +6,7 @@ import './cardDetailModal.css';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { useLists } from '../context/ListContext';
 
-const CardDetailModal = ({ show, onHide, card, onCardUpdate }) => {
+const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
     console.log(card.id);
     const { lists } = useLists();
     const { workspace } = useWorkspace();
@@ -93,6 +93,8 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate }) => {
                 console.log('Task created successfully:', newTask);
                 // Actualizar la lista de tareas y cerrar el modal
                 setTasks([...tasks, newTask]);
+                reloadTasks();
+                console.log("aca ya hace la llamada en carddetail");
                 handleCloseModal();
             } else {
                 const errorData = await response.json();

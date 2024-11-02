@@ -33,6 +33,13 @@ const Home = () => {
     return date1.toDateString() === date2.toDateString();
   }
 
+  const reloadTasks = () => {
+    if (currentBoard) {
+      fetchTasks(currentBoard.id, selectedUser || null);
+      console.log("actualiza task en home");
+    }
+  };
+
   const colorMapping = {
     '#ffb3d9': 1,
     '#add8e6': 2,
@@ -184,8 +191,8 @@ const Home = () => {
                   </button>
                 </div>
               </span>
-              <Board {...currentBoard} />
-            </div>
+              <Board {...currentBoard} reloadTasks={reloadTasks} />
+              </div>
           )}
 
           {showForm && (

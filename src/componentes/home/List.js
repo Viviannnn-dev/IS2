@@ -4,7 +4,7 @@ import Card from './Card';
 import AddButton from '../button/AddButton';
 import Modal from 'react-bootstrap/Modal'; // Importar Modal de Bootstrap
 
-const List = ({ list, listIndex, onRenameList, onDeleteList,onCardMoved, onCardList }) => {
+const List = ({ list, listIndex, onRenameList, onDeleteList,onCardMoved, onCardList,reloadTasks }) => {
   const [newCardName, setNewCardName] = useState('');
   const [showAddButton, setShowAddButton] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -139,7 +139,7 @@ const handleCardMoved = (updatedCard, newListId) => {
               error={isLimitExceeded ? 'card-limit-exceeded' : ''}
               onCardUpdate={onCardUpdate} // Pasar la función de actualización de tarjeta
               onMoveCard={handleCardMoved} // Pasar la función para mover tarjeta
-
+              reloadTasks={reloadTasks}
             />
           );
         })}
