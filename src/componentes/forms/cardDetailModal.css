@@ -63,10 +63,13 @@
     margin-top: 0%;
 }
 
+
+  
 .task-list {
     display: flex;
+    flex-direction: row-reverse;
     flex-wrap: wrap; /* Permite que los elementos se envuelvan */
-    justify-content: space-between; /* Espacia los elementos en la línea */
+    justify-content: flex-end; /* Espacia los elementos en la línea */
 }
 
 .task-item {

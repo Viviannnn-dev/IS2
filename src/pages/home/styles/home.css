@@ -83,7 +83,7 @@
   margin-top: 0%;
 }
 
-.task-home .task-list {
+.task-list {
   display: flex;
   justify-content: flex-end; /* Espacia los elementos en la línea */
   flex-direction: row-reverse
@@ -141,4 +141,7 @@
   height: 10px; /* Ajusta el tamaño del cuadrado */
   background-color: #e17272; /* Cambia el color aquí */
   margin-right: 5px; /* Espacio entre el cuadrado y la palabra */
+}
+.empty-option {
+  background-color: white !important; /* Fondo blanco para la opción vacía */
 }

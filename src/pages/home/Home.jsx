@@ -15,6 +15,8 @@ const Home = () => {
   const [currentBoard, setCurrentBoard] = useState(null);
   const [selectedLabel, setSelectedLabel] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
+  const [hasSearched, setHasSearched] = useState(false); // Estado para detectar búsquedas
+
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
   const yesterday = new Date();
@@ -34,18 +36,18 @@ const Home = () => {
   };
 
   const fetchTasks = async (board_id, user_id = null) => {
-    if(user_id=='-1'){
-        setTasks('');
+    // Evita la petición si ambos filtros están en "-1" o vacíos
+    if (selectedUser === "-1" || selectedLabel === "-1") {
+      setTasks([]); // Resetea las tareas a un array vacío
+      setHasSearched(false);
+      return;
     }
-    if(selectedLabel=='-1'){
-      setTasks('');
-  }
+  
     try {
       const baseURL = user_id 
         ? `http://localhost:8000/api/board/${board_id}/users/${user_id}/tasks/` 
         : `http://localhost:8000/api/board/${board_id}/tasks/`;
-        
-      // Condicionalmente agrega el parámetro `label` solo si `selectedLabel` está presente
+  
       const url = selectedLabel 
         ? `${baseURL}?label=${colorMapping[selectedLabel]}`
         : baseURL;
@@ -55,6 +57,7 @@ const Home = () => {
       
       if (res.ok) {
         setTasks(data);
+        setHasSearched(true);
       } else {
         console.error("Error al obtener tareas:", data);
       }
@@ -143,10 +146,10 @@ const Home = () => {
                     <select
                       value={selectedLabel}
                       onChange={handleLabelFilterChange}
-                      style={{ backgroundColor: selectedLabel || 'white' }}
-                    >
-                      <option value="-1"></option>
-                      <option value="">Todas</option>
+                      style={{ backgroundColor: selectedLabel && selectedLabel !== '-1' ? selectedLabel : 'white' }}
+                      >
+                       <option value="-1" className="empty-option"></option> 
+                       <option value="" className="empty-option">Todas</option>
                       {Object.keys(colorMapping).map((color) => (
                         <option key={color} value={color} style={{ backgroundColor: color }}>
                         </option>
@@ -174,7 +177,7 @@ const Home = () => {
           {/* Muestra las tareas debajo del componente Board */}
           <div className="task-home">
                 <div className="task-list">
-                    {tasks.length === 0 ? (
+                    {tasks.length === 0 && hasSearched ? (
                         <p>No existen tareas.</p>
                     ) : (
                         tasks.map((task, index) => {

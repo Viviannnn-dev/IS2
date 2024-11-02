@@ -156,9 +156,9 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate }) => {
                             name: data.name || '',
                             description: data.description || '',
                             dueDate: data.due_date || '',
-                            assignedUser: '',
+                            assignedUser: data.owner || '',
                             label: colorKey ? colorMapping[colorKey] : '', // Guarda el valor numérico
-                            selectedList: '',
+                            selectedList:  data.list || '',
                             creationDate: data.creationDate || new Date().toISOString().split('T')[0],
                         });
     
