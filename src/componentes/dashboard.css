@@ -1,0 +1,21 @@
+.dashboard {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dashboard h2 {
+    margin: 0; /* Eliminar margen del título */
+    padding: 0; /* Eliminar padding del título */
+  }
+  
+  .charts {
+    display: flex; /* Usar flexbox para alinear los gráficos */
+    justify-content: space-between; /* Espacio entre gráficos, puedes cambiar a 'center' si lo prefieres */
+    margin-top: 10px; /* Ajustar el espacio encima de los gráficos */
+  }
+  
+  .charts > div {
+    margin: 0; /* Eliminar márgenes de los gráficos individuales */
+    padding: 0; /* Eliminar paddings de los gráficos individuales */
+  }
+  

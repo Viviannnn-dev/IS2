@@ -1,11 +1,12 @@
 .sidebar {
   background-color: #333; /* Color de fondo oscuro */
   color: #fff; /* Color de texto blanco */
-  height: 100vh; /* Altura completa para llenar la pantalla */
   overflow-y: auto; /* Agrega scroll si el contenido excede la altura */
   display: flex;
+  height: 100vh; /* Asegura que el sidebar ocupe toda la altura de la ventana */
   flex-direction: column;
   border: none;
+  min-height: 100%; /* Permite que el sidebar ocupe al menos el 100% de su contenedor */
 }
 
 .add-board {
@@ -41,7 +42,7 @@
   border: none;
   cursor: pointer;
   display: flex;
-  justify-content: left;
+  justify-content: end;
   padding: 10px;
   color: #fff; /* Color del icono */
   margin-top: auto; /* Empuja el botón hacia abajo */
@@ -69,4 +70,6 @@
   display: flex; /* Usar flexbox */
   flex-direction: column; /* Colocar los elementos en columna */
   margin-top: 10px; /* Espacio entre el botón y la lista de tableros */
+  flex-grow: 1; /* Ocupa el espacio restante, empujando el botón de usuario hacia abajo */
+
 }

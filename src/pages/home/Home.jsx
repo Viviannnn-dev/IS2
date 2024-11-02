@@ -1,30 +1,31 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';  
 import './styles/home.css';
 import Sidebar from '../../componentes/home/Sidebar';
 import AddBoardForm from '../../componentes/forms/AddBoardForm';
 import Board from '../../componentes/home/Board';
 import SignUpForm from '../../componentes/forms/SignUpForm';
 import { useLocation } from 'react-router-dom';
+import Dashboard from '../../componentes/Dashboard';
 
 const Home = () => {
   const location = useLocation();
   const users = location.state?.users;
-  const [tasks, setTasks] = useState([]); // Estado para almacenar las tareas
+  const [tasks, setTasks] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [currentBoard, setCurrentBoard] = useState(null);
   const [selectedLabel, setSelectedLabel] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
-  const [hasSearched, setHasSearched] = useState(false); // Estado para detectar búsquedas
+  const [hasSearched, setHasSearched] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
 
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
   const yesterday = new Date();
-  yesterday.setHours(0,0, 0, 0, 0);
+  yesterday.setHours(0, 0, 0, 0, 0);
   yesterday.setDate(currentDate.getDate() - 1);
+  
   function areDatesEqual(date1, date2) {
-      console.log(date1);
-      console.log(date2);
       return date1.toDateString() === date2.toDateString();
   }
 
@@ -36,9 +37,8 @@ const Home = () => {
   };
 
   const fetchTasks = async (board_id, user_id = null) => {
-    // Evita la petición si ambos filtros están en "-1" o vacíos
     if (selectedUser === "-1" || selectedLabel === "-1") {
-      setTasks([]); // Resetea las tareas a un array vacío
+      setTasks([]);
       setHasSearched(false);
       return;
     }
@@ -65,13 +65,12 @@ const Home = () => {
       console.error("Error en la solicitud de tareas", error);
     }
   };
-  
 
   useEffect(() => {
     if (currentBoard) {
       fetchTasks(currentBoard.id, selectedUser || null);
     }
-  }, [currentBoard, selectedUser,selectedLabel]);
+  }, [currentBoard, selectedUser, selectedLabel]);
 
   const handleLabelFilterChange = (e) => {
     setSelectedLabel(e.target.value);
@@ -89,7 +88,6 @@ const Home = () => {
   const handleBoardSelect = (board) => {
     setCurrentBoard(board);
   };
-  
 
   const toggleFormVisibility = () => setShowForm(!showForm);
   const toggleSignUpVisibility = () => setShowSignUp(!showSignUp);
@@ -115,6 +113,10 @@ const Home = () => {
     }
   };
 
+  const toggleDashboardVisibility = () => {
+    setShowDashboard(!showDashboard);
+  };
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -132,7 +134,7 @@ const Home = () => {
                   <label>
                     Filtrar por usuario:
                     <select onChange={handleUserFilterChange}>
-                    <option value="-1"></option>
+                      <option value="-1"></option>
                       <option value="">Todos</option>
                       {users?.map((user) => (
                         <option key={user.id} value={user.id}>
@@ -147,15 +149,19 @@ const Home = () => {
                       value={selectedLabel}
                       onChange={handleLabelFilterChange}
                       style={{ backgroundColor: selectedLabel && selectedLabel !== '-1' ? selectedLabel : 'white' }}
-                      >
-                       <option value="-1" className="empty-option"></option> 
-                       <option value="" className="empty-option">Todas</option>
+                    >
+                      <option value="-1" className="empty-option"></option> 
+                      <option value="" className="empty-option">Todas</option>
                       {Object.keys(colorMapping).map((color) => (
                         <option key={color} value={color} style={{ backgroundColor: color }}>
                         </option>
                       ))}
                     </select>
                   </label>
+                  <button onClick={toggleDashboardVisibility} style={{ marginLeft: '10px' }}>
+                    <i className="fas fa-chart-pie"></i>
+                    Dashboard
+                  </button>
                 </div>
               </span>
               <Board {...currentBoard} />
@@ -174,44 +180,39 @@ const Home = () => {
             </div>
           )}
 
-          {/* Muestra las tareas debajo del componente Board */}
+          {/* Mostrar el dashboard o las tareas */}
           <div className="task-home">
-                <div className="task-list">
-                    {tasks.length === 0 && hasSearched ? (
-                        <p>No existen tareas.</p>
-                    ) : (
-                        tasks.map((task, index) => {
+            {showDashboard ? (
+              <Dashboard tasks={tasks} />
+            ) : (
+              <div className="task-list">
+                {tasks.length === 0 && hasSearched ? (
+                  <p>No existen tareas.</p>
+                ) : (
+                  tasks.map((task, index) => {
+                    const [year, month, day] = task.due_date.split('-').map(Number);
+                    const dueDate = new Date(year, month - 1, day);
+                    
+                    let taskClass = 'task-item'; 
+                    if (areDatesEqual(dueDate, currentDate) || areDatesEqual(dueDate, yesterday)) {
+                      taskClass = 'late';
+                    } else if (dueDate < currentDate) {
+                      taskClass = 'defeated';
+                    }
 
-                            // Convertir la fecha de vencimiento a un objeto Date
-                            const [year, month, day] = task.due_date.split('-').map(Number);
-                            const dueDate = new Date(year, month - 1, day); // Crea la fecha en medianoche local
-                            
-
-                            console.log(task.due_date)
-
-
-                            // Determinar la clase según la fecha de vencimiento
-                            let taskClass = 'task-item'; // Clase base
-
-                            // Asignar la clase "atrasada" o "vencido"
-                            if ( areDatesEqual(dueDate, currentDate) || areDatesEqual(dueDate,yesterday)) {
-                                taskClass = 'late'; // Si la fecha es hoy o ayer
-                            } else if(dueDate<currentDate){
-                                taskClass= 'defeated';
-                            }
-
-                            return (
-                                <div key={index} className={taskClass}>
-                                    <p>Nombre: {task.name}</p>
-                                    <p>Descripción: {task.description}</p>
-                                    <p>Estado: {task.status}</p>
-                                    <p>Fecha de Vencimiento: {task.due_date}</p>
-                                </div>
-                            );
-                        })
-                    )}
-                </div>
-        </div>
+                    return (
+                      <div key={index} className={taskClass}>
+                        <p>Nombre: {task.name}</p>
+                        <p>Descripción: {task.description}</p>
+                        <p>Estado: {task.status}</p>
+                        <p>Fecha de Vencimiento: {task.due_date}</p>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
