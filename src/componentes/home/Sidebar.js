@@ -51,7 +51,7 @@ const Sidebar = ({ showForm, onToggleForm, onToggleSignUp,onBoardSelect }) => {
       </button>
       {/* Mostrar la lista de tableros */}
       {showBoards && (
-      <div className="task-list">
+      <div className="task-list-sidebar">
         {boards.length === 0 ? (
           <p>No existen tableros.</p>
         ) : (

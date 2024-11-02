@@ -29,8 +29,6 @@
   cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
   font-weight: bold; /* Texto en negrita */
   text-align: left; /* Alinear el texto a la izquierda */
-  padding-left: 10px !important ;
-  padding: none !important;
 }
 
 .button-task:hover {
@@ -66,7 +64,7 @@
   text-decoration: underline; /* Subrayar al pasar el mouse */
 }
 
-.task-list {
+.task-list-sidebar {
   display: flex; /* Usar flexbox */
   flex-direction: column; /* Colocar los elementos en columna */
   margin-top: 10px; /* Espacio entre el botón y la lista de tableros */

@@ -90,7 +90,7 @@
 }
 
 .task-item {
-  width: 48%; /* Ocupar aproximadamente la mitad del contenedor */
+  width: 48% !important; /* Ocupar aproximadamente la mitad del contenedor */
   margin-bottom: 20px; /* Espacio entre las filas */
   border: 1px solid #ccc; /* Añadir borde opcional para ver los límites de cada tarea */
   padding: 10px; /* Espacio interno en cada tarea */
@@ -106,22 +106,36 @@
 
 
 .task-home .late {
-  width: 28%; 
-  background-color: #cd87b257 !important; /* Color de fondo para tareas atrasadas */
+  width:20%; 
+  background-color: #d7b2c9 !important; /* Color de fondo para tareas atrasadas */
   padding: 10px; /* Espaciado interno */
   margin-bottom: 20px; /* Espaciado entre tareas */
   box-sizing: border-box; 
   border-radius: 10px;
+  border: 3px solid #326cc9ad;
 }
 
+.task-home .task-item {
+  width: 20% !important; /* Ocupar aproximadamente la mitad del contenedor */
+  margin-bottom: 20px; /* Espacio entre las filas */
+  border: 1px solid #ccc; /* Añadir borde opcional para ver los límites de cada tarea */
+  padding: 10px; /* Espacio interno en cada tarea */
+  box-sizing: border-box; /* Asegúrate de que el padding y el border no afecten el ancho */
+  background-color: rgba(218, 212, 212, 0.797) !important;
+  border-radius: 10px;
+  border: 3px solid #326cc9ad;
+
+}
 .task-home  .defeated {
-  width: 28%; 
+  width: 20%; 
   background-color: #e17272; /* Color de fondo para tareas no atrasadas */
-  color: hsl(0, 0%, 99%); /* Color de texto para tareas no atrasadas */
+  color: black; /* Color de texto para tareas no atrasadas */
   padding: 10px; /* Espaciado interno */
   margin-bottom: 20px; /* Espaciado entre tareas */
   box-sizing: border-box; 
   border-radius: 10px;
+  border: 3px solid #326cc9ad;
+
 }
 
 .color-box {
@@ -144,4 +158,26 @@
 }
 .empty-option {
   background-color: white !important; /* Fondo blanco para la opción vacía */
+}
+
+.box-late-home {
+  width: 10px; /* Ajusta el tamaño del cuadrado */
+  height: 10px; /* Ajusta el tamaño del cuadrado */
+  background-color:#d7b2c9 ; /* Cambia el color aquí */
+  margin-right: 5px; /* Espacio entre el cuadrado y la palabra */
+}
+
+.box-defeated-home {
+  width: 10px; /* Ajusta el tamaño del cuadrado */
+  height: 10px; /* Ajusta el tamaño del cuadrado */
+  background-color: #e17272; /* Cambia el color aquí */
+  margin-right: 5px; /* Espacio entre el cuadrado y la palabra */
+}
+
+.no-style-button {
+  background: none; /* Elimina el fondo */
+  border: none; /* Elimina el borde */
+  color: white; /* Hereda el color del texto del padre */
+  padding: 0; /* Elimina el padding */
+  cursor: pointer; /* Cambia el cursor a puntero */
 }

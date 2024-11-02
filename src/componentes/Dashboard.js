@@ -27,11 +27,11 @@ const Dashboard = ({ tasks }) => {
       <div className="charts">
         <div>
           <BarChart width={400} height={300} data={dataBar}>
-            <XAxis dataKey="name" />
-            <YAxis />
+            <XAxis dataKey="name" stroke="#000" /> {/* Cambia el color de las etiquetas en el eje X */}
+            <YAxis stroke="#000" /> {/* Cambia el color de las etiquetas en el eje Y */}
             <Tooltip />
             <Legend />
-            <Bar dataKey="value" fill="#333333a2" />
+            <Bar dataKey="value" fill="#333333a2" strokeWidth={2} /> {/* Color de la barra y su borde */}
           </BarChart>
         </div>
         <div>

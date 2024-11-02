@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';  
+import React, { useState, useEffect } from 'react';   
 import './styles/home.css';
 import Sidebar from '../../componentes/home/Sidebar';
 import AddBoardForm from '../../componentes/forms/AddBoardForm';
@@ -6,10 +6,12 @@ import Board from '../../componentes/home/Board';
 import SignUpForm from '../../componentes/forms/SignUpForm';
 import { useLocation } from 'react-router-dom';
 import Dashboard from '../../componentes/Dashboard';
+import { useWorkspace } from '../../componentes/context/WorkspaceContext';
+
 
 const Home = () => {
   const location = useLocation();
-  const users = location.state?.users;
+  const [users, setUsers] = useState([]); // Para almacenar los usuarios
   const [tasks, setTasks] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
@@ -18,6 +20,8 @@ const Home = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const { workspace } = useWorkspace();
+
 
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
@@ -26,7 +30,7 @@ const Home = () => {
   yesterday.setDate(currentDate.getDate() - 1);
   
   function areDatesEqual(date1, date2) {
-      return date1.toDateString() === date2.toDateString();
+    return date1.toDateString() === date2.toDateString();
   }
 
   const colorMapping = {
@@ -113,6 +117,24 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/workspaces/${workspace.id}/users/`); // Ajusta la URL según tu API
+            if (response.ok) {
+                const data = await response.json();
+                setUsers(data); // Supongo que el formato es un array de usuarios
+                console.log(data);
+            } else {
+                console.error('Error fetching users:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    };
+    fetchUsers();
+}, [workspace.id]); // Solo se ejecuta cuando cambia el ID del workspace
+
   const toggleDashboardVisibility = () => {
     setShowDashboard(!showDashboard);
   };
@@ -153,13 +175,11 @@ const Home = () => {
                       <option value="-1" className="empty-option"></option> 
                       <option value="" className="empty-option">Todas</option>
                       {Object.keys(colorMapping).map((color) => (
-                        <option key={color} value={color} style={{ backgroundColor: color }}>
-                        </option>
+                        <option key={color} value={color} style={{ backgroundColor: color }}></option>
                       ))}
                     </select>
                   </label>
-                  <button onClick={toggleDashboardVisibility} style={{ marginLeft: '10px' }}>
-                    <i className="fas fa-chart-pie"></i>
+                  <button className="no-style-button" onClick={toggleDashboardVisibility}>
                     Dashboard
                   </button>
                 </div>
@@ -189,30 +209,46 @@ const Home = () => {
                 {tasks.length === 0 && hasSearched ? (
                   <p>No existen tareas.</p>
                 ) : (
-                  tasks.map((task, index) => {
-                    const [year, month, day] = task.due_date.split('-').map(Number);
-                    const dueDate = new Date(year, month - 1, day);
-                    
-                    let taskClass = 'task-item'; 
-                    if (areDatesEqual(dueDate, currentDate) || areDatesEqual(dueDate, yesterday)) {
-                      taskClass = 'late';
-                    } else if (dueDate < currentDate) {
-                      taskClass = 'defeated';
-                    }
+                  <>
+                    {tasks.map((task, index) => {
+                      const [year, month, day] = task.due_date.split('-').map(Number);
+                      const dueDate = new Date(year, month - 1, day);
+                      
+                      let taskClass = 'task-item'; 
+                      if (areDatesEqual(dueDate, currentDate) || areDatesEqual(dueDate, yesterday)) {
+                        taskClass = 'late';
+                      } else if (dueDate < currentDate) {
+                        taskClass = 'defeated';
+                      }
 
-                    return (
-                      <div key={index} className={taskClass}>
-                        <p>Nombre: {task.name}</p>
-                        <p>Descripción: {task.description}</p>
-                        <p>Estado: {task.status}</p>
-                        <p>Fecha de Vencimiento: {task.due_date}</p>
-                      </div>
-                    );
-                  })
+                      return (
+                        <div key={index} className={taskClass}>
+                          <p>Nombre: {task.name}</p>
+                          <p>Descripción: {task.description}</p>
+                          <p>Estado: {task.status}</p>
+                          <p>Fecha de Vencimiento: {task.due_date}</p>
+                        </div>
+                      );
+                    })}
+                  </>
                 )}
               </div>
             )}
           </div>
+
+          {/* Mostrar las etiquetas debajo de las tareas solo si no se muestra el dashboard */}
+          {!showDashboard && tasks.length > 0 && (
+            <div className="color-boxes">
+              <div className="color-box">
+                <span className="box-late-home"></span>
+                <span className="label">Atrasado</span>
+              </div>
+              <div className="color-box">
+                <span className="box-defeated-home"></span>
+                <span className="label">Vencido</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
