@@ -90,3 +90,8 @@
   justify-content: space-between; /* Alinea los botones a la derecha */
   margin-top: auto; /* Empuja los botones hacia el fondo */
 }
+
+
+.modal-sidebar {
+ text-align: center;
+}

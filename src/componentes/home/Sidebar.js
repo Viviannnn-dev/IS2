@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './sidebar.css';
+import { Modal } from 'react-bootstrap'; // Importar Modal de react-bootstrap
 import AddButton from '../button/AddButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faPowerOff } from '@fortawesome/free-solid-svg-icons';
@@ -22,8 +23,11 @@ const Sidebar = ({ showForm, onToggleForm, onToggleSignUp, onBoardSelect }) => {
   };
 
   const handleDeactivate = async () => {
+    console.log("PARA DESACTIVAR");
+    console.log("USUARIO ID",user.id);
+    console.log("OWNER ID",workspace.owner);
     // Verifica si el usuario actual es el propietario del workspace
-    if (user && workspace.owner && user.id === workspace.owner.id) {
+    if (user && workspace.owner &&  user.id === workspace.owner) {
       try {
         const response = await fetch(`http://localhost:8000/api/workspace-update/${workspace.id}/`, {
           method: 'PUT', // O 'PATCH', según lo que necesites
@@ -52,6 +56,7 @@ const Sidebar = ({ showForm, onToggleForm, onToggleSignUp, onBoardSelect }) => {
         setShowModal(true);
       }
     } else {
+      console.log("Solo el owner puede desactivar un workspace");
       // Si el usuario no es el propietario, mostrar el mensaje correspondiente
       setModalMessage('Solo el owner puede desactivar un workspace');
       setShowModal(true);
@@ -127,14 +132,14 @@ const Sidebar = ({ showForm, onToggleForm, onToggleSignUp, onBoardSelect }) => {
       </div>
 
       {/* Modal de error o éxito */}
-      {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>{modalMessage}</h2>
-            <button onClick={closeModal}>Cerrar</button>
-          </div>
-        </div>
-      )}
+      <Modal show={showModal} onHide={closeModal} dialogClassName="custom-modal">
+        <Modal.Header closeButton className="modal-header-custom">
+          <Modal.Title>{}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="modal-body-custom modal-sidebar ">
+          <p>{modalMessage}</p>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

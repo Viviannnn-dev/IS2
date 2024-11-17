@@ -7,6 +7,9 @@ export default function Login() {
   const [isSignUpActive, setIsSignUpActive] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(''); // Estado para errores de inicio de sesión
+  const [registerError, setRegisterError] = useState(''); // Estado para errores de registro
+ 
   const navigate = useNavigate();
 
   // Manejo de registro
@@ -25,10 +28,12 @@ export default function Login() {
         console.log('Usuario registrado con éxito');
         setIsSignUpActive(false);
       } else {
+        setRegisterError(data.error || 'Usuario existente');
         console.error('Error al registrar usuario', data);
       }
     } catch (error) {
       console.error('Error en la solicitud de registro', error);
+      setRegisterError('Error en la solicitud de registro');
     }
   };
 
@@ -55,9 +60,11 @@ export default function Login() {
         navigate('/workspace');
       } else {
         console.error('Error al iniciar sesión', data);
+        setLoginError(data.error || 'Error al iniciar sesión');
       }
     } catch (error) {
       console.error('Error en la solicitud de inicio de sesión', error);
+      setLoginError('Error en la solicitud de inicio de sesión');
     }
   };
 
@@ -94,12 +101,16 @@ export default function Login() {
     setUsername('');
     setPassword('');
     setIsSignUpActive(true);
+    setRegisterError(''); // Limpia los errores al cambiar de formulario
+    setLoginError('');
   };
 
   const handleSignInClick = () => {
     setUsername('');
     setPassword('');
     setIsSignUpActive(false);
+    setRegisterError(''); // Limpia los errores al cambiar de formulario
+    setLoginError('');
   };
 
   return (
@@ -124,6 +135,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+             {registerError && <p className="error-message">{registerError}</p>}
             <button type="submit" className="button registrar-button">Registrarse</button>
             <GoogleLogin
     onSuccess={googleLogin}
@@ -155,6 +167,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            {loginError && <p className="error-message">{loginError}</p>}
             <button type="submit" className="button">Ingresar</button>
             <GoogleLogin
               onSuccess={googleLogin}

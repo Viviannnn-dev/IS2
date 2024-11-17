@@ -90,8 +90,8 @@ console.log(user.username);  // Ejemplo de acceso a los datos del usuario
               onClick={() => handleWorkspaceClick(workspace)}
               className='workspace-button'
             >
-              {workspace.name}
-            </button>
+                {workspace.name} {workspace.status === 'inactive' && '(Inactivo)'}
+             </button>
           ))}
         </div>
 
