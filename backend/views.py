@@ -7,7 +7,49 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Workspace,Board,List,Card, Task
+from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from google.auth.transport import requests
+from google.oauth2 import id_token
+from django.conf import settings
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def google_login(request):
+    token = request.data.get('token')  # Token enviado por el cliente
+    if not token:
+        return Response({"error": "Token no proporcionado"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        # Validar el token con Google
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), settings.GOOGLE_CLIENT_ID)
+
+        # Extraer información del usuario
+        email = idinfo.get('email')
+        username = email.split('@')[0]  # Usar la parte antes del '@' como username por defecto
+        password = User.objects.make_random_password()  # Generar una contraseña aleatoria
+
+        # Buscar o crear el usuario
+        user, created = User.objects.get_or_create(email=email, defaults={'username': username})
+        if created:
+            user.set_password(password)  # Configurar la contraseña aleatoria
+            user.save()
+
+        # Generar o recuperar el token
+        token, _ = Token.objects.get_or_create(user=user)
+
+        # Usar el serializador para retornar los datos del usuario
+        serializer = UserSerializer(instance=user)
+        return Response({"token": token.key, "user": serializer.data}, status=status.HTTP_200_OK)
+
+    except ValueError as e:
+        return Response({"error": "Token inválido o expirado", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        return Response({"error": "Ocurrió un error inesperado", "details": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 @api_view(['GET'])
 @permission_classes([AllowAny])  # Permitir acceso a cualquier usuario
 def get_users_id(request, workspace_id):

@@ -5,7 +5,7 @@ import { useWorkspace } from '../../componentes/context/WorkspaceContext';
 
 import './styles/workspace.css';
 
-function Workspace({ user }) {
+function Workspace({}) {
   const [workspaces, setWorkspaces] = useState([]);
   const { setWorkspace } = useWorkspace();
   const [users, setUsers] = useState([]);
@@ -16,20 +16,29 @@ function Workspace({ user }) {
   });
   const navigate = useNavigate();
 
+const user = JSON.parse(localStorage.getItem('user'));
+console.log(user.username);  // Ejemplo de acceso a los datos del usuario
+
   // Obtener los workspaces del usuario autenticado
   useEffect(() => {
-    if (user) {
+    if (user.id) {
+    console.log('USER',user.id);  // Ejemplo de acceso a los datos del usuario
+
       axios.get(`http://localhost:8000/api/workspace/`, { params: { user_id: user.id } })
         .then(response => setWorkspaces(response.data))
         .catch(error => console.error('Error al obtener workspaces:', error));
     }
-  }, [user]);
+  }, [user.id]);
 
   // Obtener todos los usuarios para el selector
   useEffect(() => {
     axios.get(`http://localhost:8000/api/users/`)
-      .then(response => setUsers(response.data))
-      .catch(error => console.error('Error al obtener usuarios:', error));
+.then(response => {
+    // Filtrar al usuario autenticado para que no se muestre en la lista
+    const filteredUsers = response.data.filter(u => u.id !== user.id);
+    setUsers(filteredUsers);
+  })
+        .catch(error => console.error('Error al obtener usuarios:', error));
   }, []);
 
   // Manejar el formulario para crear un nuevo workspace
@@ -46,16 +55,21 @@ function Workspace({ user }) {
     setFormData({ ...formData, users: selectedUsers });
   };
 
-  const handleCreateWorkspace = (e) => {
-    e.preventDefault();
-    axios.post(`http://localhost:8000/api/save_workspace/`, formData)
-      .then(response => {
-        setWorkspace(response.data);
-        navigate('/home', { state: { users } });  // Aquí pasas `user` a `Home`
-      })
-      .catch(error => console.error('Error al crear workspace:', error));
-  };
+ const handleCreateWorkspace = (e) => {
+    e.preventDefault();
+    // Asignar el usuario autenticado como el owner del workspace
+    const workspaceData = { 
+      ...formData, 
+      owner: user.id 
+    };
 
+    axios.post(`http://localhost:8000/api/save_workspace/`, workspaceData)
+      .then(response => {
+        setWorkspace(response.data);
+        navigate('/home', { state: { users } });  // Aquí pasas `users` a `Home`
+      })
+      .catch(error => console.error('Error al crear workspace:', error));
+  };
   // Función para redirigir al Home con los datos del Workspace seleccionado
   const handleWorkspaceClick = (workspace) => {
     setWorkspace(workspace);

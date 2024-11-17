@@ -22,7 +22,8 @@ const Home = () => {
   const [showDashboard, setShowDashboard] = useState(false);
   const { workspace } = useWorkspace();
 
-
+  console.log('Workspace', workspace);
+  
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
   const yesterday = new Date();

@@ -314,3 +314,8 @@ button.ghost {
     background-color: #357ae8; /* Color del botón cuando se pasa el ratón por encima */
   }
   
+ /* Ocultar el texto por defecto */
+span.L6cTce {
+    display: none;
+  }
+  

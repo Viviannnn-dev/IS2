@@ -16,6 +16,13 @@ class Workspace(models.Model):
     # Lista de usuarios asociados al Workspace (muchos a muchos)
     users = models.ManyToManyField(User, related_name='workspaces')
 
+    owner = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,  # Si el usuario se elimina, también se elimina el workspace
+        related_name='owned_workspaces',
+        null=True
+    )
+
     def __str__(self):
         return self.name
 

@@ -25,7 +25,7 @@ class WorkspaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Workspace
-        fields = ['id', 'description', 'name', 'status', 'users']  
+        fields = ['id', 'description', 'name', 'status', 'users', 'owner']  
 
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:

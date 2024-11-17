@@ -3,3 +3,11 @@
     font-size: 14px;
     font-family: "Poppins", sans-serif;
 }
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 0.9em;
+  }
+  

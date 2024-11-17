@@ -40,14 +40,27 @@
   border: none;
   cursor: pointer;
   display: flex;
-  justify-content: end;
+  justify-content: center; /* Alineación centrada dentro del contenedor */
   padding: 10px;
   color: #fff; /* Color del icono */
-  margin-top: auto; /* Empuja el botón hacia abajo */
 }
 
-.user-icon {
-  font-size: 24px; /* Tamaño del icono */
+.deactivate-button {
+  background: none; /* Sin fondo */
+  border: none; /* Sin borde */
+  cursor: pointer;
+  display: flex;
+  justify-content: center; /* Alineación centrada dentro del contenedor */
+  padding: 10px;
+  color: #fff; /* Color del icono */
+}
+
+.deactivate-button:hover {
+  text-decoration: underline; /* Subrayar al pasar el mouse */
+}
+
+.user-icon, .deactivate-icon {
+  font-size: 24px; /* Tamaño de los iconos */
 }
 
 .board-button {
@@ -69,5 +82,11 @@
   flex-direction: column; /* Colocar los elementos en columna */
   margin-top: 10px; /* Espacio entre el botón y la lista de tableros */
   flex-grow: 1; /* Ocupa el espacio restante, empujando el botón de usuario hacia abajo */
+}
 
+.user-buttons-container {
+  display: flex;
+  flex-direction: row; /* Los botones estarán en fila */
+  justify-content: space-between; /* Alinea los botones a la derecha */
+  margin-top: auto; /* Empuja los botones hacia el fondo */
 }

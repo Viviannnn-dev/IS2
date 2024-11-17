@@ -142,3 +142,4 @@ REST_FRAMEWORK = {
 
 CORS_ALLOW_ALL_ORIGINS = True  # O especifica dominios permitidos con CORS_ALLOWED_ORIGINS
 
+GOOGLE_CLIENT_ID ='562355587406-16297quim0m3m6akgf404d4o5uvivua6.apps.googleusercontent.com'
