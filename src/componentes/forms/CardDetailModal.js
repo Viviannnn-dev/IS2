@@ -9,23 +9,24 @@ import { useLists } from '../context/ListContext';
 const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
     console.log(card.id);
     const { lists } = useLists();
+    const [isEditing, setIsEditing] = useState(false);
     const { workspace } = useWorkspace();
     const [selectedColor, setSelectedColor] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [tasks, setTasks] = useState([]);
     const [showTasks, setShowTasks] = useState(false); // Estado para controlar la visibilidad de la lista de tareas
     const [users, setUsers] = useState([]); // Para almacenar los usuarios
-
+    const [selectedTask, setSelectedTask] = useState(null); 
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     const yesterday = new Date();
     yesterday.setHours(0,0, 0, 0, 0);
     yesterday.setDate(currentDate.getDate() - 1);
     function areDatesEqual(date1, date2) {
-        console.log(date1);
-        console.log(date2);
         return date1.toDateString() === date2.toDateString();
     }
+
+
     
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -33,20 +34,38 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
         name: '',
         description: '',
         status: 'open',
-        dueDate: new Date().toISOString().split('T')[0]    });
+        dueDate: new Date().toISOString().split('T')[0]   
+     });
 
     const handleShowModal = () => {
-            setFormDataTask({ // Restablecer los valores vacíos
-                name: '',
-                description: '',
-                status: 'open',
-                dueDate: new Date().toISOString().split('T')[0]
-            });
-            setShowModal(true);
-        };
-            const handleCloseModal = () => {
+        console.log()
+        setFormDataTask({
+            name: '',
+            description: '',
+            status: 'open',
+            dueDate: new Date().toISOString().split('T')[0]
+        });
+        setShowModal(true);
+        setErrorMessage('');
+    };
+
+    const handleTaskClick = (task) => {
+        setSelectedTask(task);
+        setFormDataTask({
+            name: task.name,
+            description: task.description,
+            status: task.status,
+            dueDate: task.due_date,
+        });
+        console.log('task para actualizar', selectedTask);
+        setShowModal(true);  // Abre el modal
+        setIsEditing(true); 
+    };
+    
+    const handleCloseModal = () => {
         setShowModal(false);
         setShowTasks(false); // Limpiar la visibilidad de la lista de tareas al cerrar el modal
+        setErrorMessage('');
     };
 
     const handleChangeTask = (e) => {
@@ -56,6 +75,12 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
             [name]: value
         }));
 
+        if (selectedTask) {
+            setSelectedTask({
+                ...selectedTask,
+                [name]: value,
+            });
+        }
         setErrorMessage('');
     };
 
@@ -104,6 +129,41 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
         } catch (error) {
             console.error('Error creating task:', error);
             setErrorMessage('Error al crear la tarea. Inténtelo de nuevo.');
+        }
+    };
+
+
+    const handleUpdateTask = async () => {
+        const taskData = {
+            name: formDataTask.name,
+            description: formDataTask.description,
+            status: formDataTask.status,
+            due_date: formDataTask.dueDate,
+        };
+
+        console.log('TASKDATA',taskData);
+        try {
+            const response = await fetch(`http://localhost:8000/api/task-update/${selectedTask.id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(taskData),
+            });
+
+            if (response.ok) {
+                const updatedTask = await response.json();
+                const updatedTasks = tasks.map((task) => task.id === updatedTask.id ? updatedTask : task);
+                setTasks(updatedTasks);
+                reloadTasks();
+                handleCloseModal(); // Cerrar el modal después de actualizar la tarea
+            } else {
+                const errorData = await response.json();
+                setErrorMessage('Error al actualizar la tarea. Inténtelo de nuevo.');
+            }
+        } catch (error) {
+            console.error('Error updating task:', error);
+            setErrorMessage('Error al actualizar la tarea. Inténtelo de nuevo.');
         }
     };
     
@@ -220,6 +280,11 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
 
     const handleSaveToDB = async (e) => {
         e.preventDefault();
+         // Verificar que la fecha de vencimiento sea válida y no esté vacía
+        if (!formData.dueDate || new Date(formData.dueDate) <= new Date()) {
+            setErrorMessage('Por favor, ingrese una fecha de vencimiento válida.');
+            return; // Detener la ejecución si la fecha no es válida
+        }
         try {
             const response = await fetch(`http://localhost:8000/api/card-update/${card.id}/`, {
                 method: 'PATCH',
@@ -256,6 +321,7 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
         color: selectedColor ? 'black' : 'black',
     };
 
+    
     return (
         <Modal show={show} onHide={onHide} dialogClassName="custom-modal">
             <Modal.Header closeButton className="modal-header-custom">
@@ -292,6 +358,8 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
                             value={formData.dueDate}
                             onChange={handleChange}
                         />
+                        {errorMessage && <div className="text-danger">{errorMessage}</div>}
+
                     </Form.Group>
                     <Form.Group className="mb-2" controlId="usuario">
                         <Form.Label>Usuario Asignado</Form.Label>
@@ -365,9 +433,6 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
                             const dueDate = new Date(year, month - 1, day); // Crea la fecha en medianoche local
                             
 
-                            console.log(task.due_date)
-
-
                             // Determinar la clase según la fecha de vencimiento
                             let taskClass = 'task-item'; // Clase base
 
@@ -379,12 +444,13 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
                             }
 
                             return (
-                                <div key={index} className={taskClass}>
+                                <div key={index} className={taskClass} onClick={() => handleTaskClick(task)}>
                                     <p>Nombre: {task.name}</p>
                                     <p>Descripción: {task.description}</p>
                                     <p>Estado: {task.status}</p>
                                     <p>Fecha de Vencimiento: {task.due_date}</p>
                                 </div>
+
                             );
                         })
                     )}
@@ -405,14 +471,13 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
                 </Modal.Header>
                 <Modal.Body >
                 {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-
                     <Form>
                     <Form.Group controlId="name" className="mb-0 mt-0">
                             <Form.Label>Nombre</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="name"
-                                value={formDataTask.name}
+                                value={formDataTask.name || ""}
                                 onChange={handleChangeTask}
                                 className="form-control-sm"
                             />
@@ -422,7 +487,7 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
                             <Form.Control
                                 type="text"
                                 name="description"
-                                value={formDataTask.description}
+                                value={formDataTask.description || ""}
                                 onChange={handleChangeTask}
                                 className="form-control-sm"
                             />
@@ -431,7 +496,7 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
                             <Form.Label>Estado</Form.Label>
                             <Form.Select
                                 name="status"
-                                value={formDataTask.status}
+                                value={formDataTask.status || ""}
                                 onChange={handleChangeTask}
                                 className="form-select-sm"
                             >
@@ -444,7 +509,7 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
                             <Form.Control
                                 type="date"
                                 name="dueDate"
-                                value={formDataTask.dueDate}
+                                value={formDataTask.dueDate || ""}
                                 onChange={handleChangeTask}
                                 className="form-control-sm"
                             />
@@ -455,8 +520,8 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
                     <Button variant="secondary" onClick={handleCloseModal} className='btn-sm'>
                         Cancelar
                     </Button>
-                    <Button variant="primary" onClick={handleSaveTask} className='btn-sm'>
-                        Guardar
+                    <Button variant="primary" onClick={isEditing ? handleUpdateTask : handleSaveTask} className='btn-sm'>
+                        {isEditing ? 'Actualizar' : 'Guardar'}
                     </Button>
                 </Modal.Footer>
             </Modal>
