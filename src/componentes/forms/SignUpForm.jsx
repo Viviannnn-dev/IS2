@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './SignUpForm.css';
 
-const SignUpForm = ({ onSignUp, onClose }) => {
+
+const SignUpForm = ({ onSignUp, onClose,registerError ,registerMessagge}) => {
   const [username, setUsername] = useState(''); // Inicialmente vacío
   const [password, setPassword] = useState(''); // Inicialmente vacío
 
@@ -20,6 +21,13 @@ const SignUpForm = ({ onSignUp, onClose }) => {
       onClose();
     }
   };
+
+useEffect(() => {
+    if (registerMessagge) {
+      // Cierra el modal automáticamente si hay mensaje de éxito
+      setTimeout(() => onClose(), 2000); // Cierra después de 2 segundos
+    }
+  }, [registerMessagge, onClose]);
 
   return (
     <div className="sign-up-modal" onClick={handleBackgroundClick}>
@@ -45,6 +53,8 @@ const SignUpForm = ({ onSignUp, onClose }) => {
               required
               className="form-control-sm"
             />
+            {registerError && <p className="error-message">{registerError}</p>}
+            {registerMessagge && <p className="error-message">{registerMessagge}</p>}
           </Form.Group>
           <div className="d-flex justify-content-center">
             <Button type="submit" variant="outline-light" className="btn-sm custom-btn">

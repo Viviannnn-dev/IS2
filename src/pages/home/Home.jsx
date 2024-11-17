@@ -20,6 +20,8 @@ const Home = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [registerError, setRegisterError] = useState(''); // Estado para errores de registro
+  const [register, setRegister] = useState(''); // Estado para errores de registro
   const { workspace } = useWorkspace();
 
   console.log('Workspace', workspace);
@@ -101,9 +103,16 @@ const Home = () => {
     setCurrentBoard(board);
   };
 
-  const toggleFormVisibility = () => setShowForm(!showForm);
-  const toggleSignUpVisibility = () => setShowSignUp(!showSignUp);
-
+  const toggleFormVisibility = () => {
+    setShowForm(!showForm);
+  };
+  const toggleSignUpVisibility = () => {
+    setShowSignUp(!showSignUp);
+    if (showSignUp) {
+        setRegisterError(''); // Limpia el error al cerrar el modal
+        setRegister('');
+    }
+};
   const handleSignUp = async (username, password) => {
     try {
       const res = await fetch('http://localhost:8000/api/register/', {
@@ -117,11 +126,15 @@ const Home = () => {
       const data = await res.json();
       if (res.ok) {
         setShowSignUp(false);
+        setRegisterError('');
+        setRegister('Usuario Registrado con éxito');
       } else {
+        setRegisterError(data.error || 'Usuario existente');
         console.error('Error al registrar usuario', data);
       }
     } catch (error) {
       console.error("Error en la solicitud de registro", error);
+      setRegisterError('Error en la solicitud de registro');
     }
   };
 
@@ -204,7 +217,7 @@ const Home = () => {
 
           {showSignUp && (
             <div className="sign-up-form-container">
-              <SignUpForm onSignUp={handleSignUp} onClose={toggleSignUpVisibility} />
+              <SignUpForm onSignUp={handleSignUp} onClose={toggleSignUpVisibility} registerError ={registerError} registerMessagge ={register}/>
             </div>
           )}
 

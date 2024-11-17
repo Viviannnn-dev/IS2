@@ -16,7 +16,7 @@
      padding: 15px;
      border-radius: 8px;
      width: 300px;
-     height: 250px;
+     height: 280px;
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     
@@ -45,7 +45,7 @@
         color: rgba(240, 248, 255, 0.678); /* Color del texto */
         transition: background-color 0.3s; /* Transición suave para el fondo */
         display: flex; /* Usar flexbox para centrar */
-        justify-content: center; /* Centrar horizontalmente */
+        justify-content: center !important; /* Centrar horizontalmente */
         align-items: center; /* Centrar verticalmente */
         padding: 0; /* Eliminar padding para que el tamaño sea más controlado */
     }
