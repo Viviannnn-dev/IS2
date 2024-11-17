@@ -3,22 +3,32 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } fro
 import './dashboard.css'; // Asegúrate de que tu CSS está importado
 
 const Dashboard = ({ tasks }) => {
+  // Definimos el conteo de tareas según los diferentes estados
   const taskCounts = {
     total: tasks.length,
-    todo: tasks.filter(task => task.status === 'To Do').length,
-    inProgress: tasks.filter(task => task.status === 'In Progress').length,
-    done: tasks.filter(task => task.status === 'Done').length,
+    open: tasks.filter(task => task.status === 'open').length, // Cambiado de 'To Do' a 'open'
+    closed: tasks.filter(task => task.status === 'closed').length, // Cambiado de 'Done' a 'closed'
     overdue: tasks.filter(task => new Date(task.due_date) < new Date()).length,
+    // Tareas atrasadas: Se considera atrasada si su fecha de vencimiento es anterior a la fecha actual
+    // pero no está completamente vencida (es decir, vencida en el mismo día o antes).
+    overdueTasks: tasks.filter(task => {
+      const dueDate = new Date(task.due_date);
+      const currentDate = new Date();
+      // Filtramos las tareas que están vencidas o están en el mismo día de vencimiento
+      return dueDate < currentDate && dueDate >= currentDate.setDate(currentDate.getDate() - 1);
+    }).length,
   };
 
+  // Datos para el gráfico de pie
   const dataPie = [
-    { name: 'To Do', value: taskCounts.todo },
-    { name: 'In Progress', value: taskCounts.inProgress },
-    { name: 'Done', value: taskCounts.done },
+    { name: 'Open', value: taskCounts.open }, // Cambiado de 'To Do' a 'Open'
+    { name: 'Closed', value: taskCounts.closed }, // Cambiado de 'Done' a 'Closed'
   ];
 
+  // Datos para el gráfico de barras (incluyendo tareas atrasadas)
   const dataBar = [
-    { name: 'Tareas Vencidas', value: taskCounts.overdue },
+    { name: 'Atrasadas', value: taskCounts.overdueTasks }, // Agregado gráfico de tareas atrasadas
+    { name: 'Vencidas', value: taskCounts.overdue },
     { name: 'Total de Tareas', value: taskCounts.total },
   ];
 
@@ -36,9 +46,12 @@ const Dashboard = ({ tasks }) => {
         </div>
         <div>
           <PieChart width={400} height={400}>
-            <Pie data={dataPie} cx={200} cy={200} outerRadius={80} fill="#82ca9d" label>
+            <Pie data={dataPie} cx={110} cy={120} outerRadius={80} fill="#82ca9d" label> {/* Ajusta el valor de cy para mover el gráfico hacia arriba */}
               {dataPie.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.name === 'To Do' ? '#ffb3d9' : entry.name === 'In Progress' ? '#add8e6' : '#b2e2b2'} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.name === 'Open' ? '#ffb3d9' : entry.name === 'Closed' ? '#add8e6' : '#b2e2b2'}
+                />
               ))}
             </Pie>
             <Tooltip />

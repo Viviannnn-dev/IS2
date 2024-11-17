@@ -47,6 +47,7 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
         });
         setShowModal(true);
         setErrorMessage('');
+        setIsEditing(false);
     };
 
     const handleTaskClick = (task) => {
@@ -66,6 +67,7 @@ const CardDetailModal = ({ show, onHide, card, onCardUpdate , reloadTasks}) => {
         setShowModal(false);
         setShowTasks(false); // Limpiar la visibilidad de la lista de tareas al cerrar el modal
         setErrorMessage('');
+        setIsEditing(false);
     };
 
     const handleChangeTask = (e) => {
