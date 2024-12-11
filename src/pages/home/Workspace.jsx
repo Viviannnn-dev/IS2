@@ -24,7 +24,8 @@ console.log(user.username);  // Ejemplo de acceso a los datos del usuario
     if (user.id) {
     console.log('USER',user.id);  // Ejemplo de acceso a los datos del usuario
 
-      axios.get(`http://localhost:8000/api/workspace/`, { params: { user_id: user.id } })
+      axios.get(`http://localhost:8000/api/workspaces/user/${user.id}/`,
+   { params: { user_id: user.id } })
         .then(response => setWorkspaces(response.data))
         .catch(error => console.error('Error al obtener workspaces:', error));
     }
@@ -58,9 +59,15 @@ console.log(user.username);  // Ejemplo de acceso a los datos del usuario
  const handleCreateWorkspace = (e) => {
     e.preventDefault();
     // Asignar el usuario autenticado como el owner del workspace
+   
+    const selectedUsers = formData.users.includes(user.id)
+    ? formData.users
+    : [...formData.users, user.id];
+   
     const workspaceData = { 
       ...formData, 
-      owner: user.id 
+      owner: user.id ,
+      users: selectedUsers,
     };
 
     axios.post(`http://localhost:8000/api/save_workspace/`, workspaceData)

@@ -138,11 +138,11 @@ export default function Login() {
              {registerError && <p className="error-message">{registerError}</p>}
             <button type="submit" className="button registrar-button">Registrarse</button>
             <GoogleLogin
-    onSuccess={googleLogin}
-    onError={handleGoogleLoginError}
-    useOneTap
-    buttonText="Registrar con Google"
-/>
+            onSuccess={googleLogin}
+            onError={handleGoogleLoginError}
+            useOneTap
+            buttonText="Registrar con Google"
+        />
 
 
           </form>

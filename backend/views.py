@@ -215,6 +215,19 @@ def create_board(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+@permission_classes([AllowAny])  # Cambia a IsAuthenticated si se requiere autenticación
+def get_workspaces_by_user(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        workspaces = user.workspaces.all()  # Obtener workspaces asociados al usuario
+        serializer = WorkspaceSerializer(workspaces, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['GET'])
 @permission_classes([AllowAny]) 
 def get_lists(request):
