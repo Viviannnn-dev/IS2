@@ -2,16 +2,35 @@
     margin: 0;
     padding: 0;
   }
+
+  .dashboard {
+    width: 100%;
+    overflow-x: auto; /* Permite el desplazamiento horizontal */
+    white-space: nowrap; /* Evita que los elementos se ajusten y los mantiene en una línea */
+  }
+  
+  .dashboard-content {
+    display: inline-block; /* Hace que los elementos dentro del contenedor no se alineen en bloques */
+    min-width: 100%; /* Asegura que el contenido pueda expandirse */
+  }
+  
   
   .dashboard h2 {
     margin: 0; /* Eliminar margen del título */
     padding: 0; /* Eliminar padding del título */
+    font-size: 20px;
+  }
+
+  .dashboard h3 {
+    font-size: 20px;
+    margin-left:-86px;
   }
   
   .charts {
     display: flex; /* Usar flexbox para alinear los gráficos */
     justify-content: space-between; /* Espacio entre gráficos, puedes cambiar a 'center' si lo prefieres */
     margin-top: 10px; /* Ajustar el espacio encima de los gráficos */
+    text-align: center;
   }
   
   .charts > div {
@@ -19,3 +38,44 @@
     padding: 0; /* Eliminar paddings de los gráficos individuales */
   }
   
+  .charts {
+  display: flex;
+  justify-content: space-between; /* Alinea los elementos con espacio entre ellos */
+  gap: 10px; /* Espacio entre los elementos */
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra el contenido dentro de cada gráfico */
+  margin: 0;
+}
+
+.chart-container h3 {
+  margin-bottom: 10px; /* Reduce el espacio entre el título y el gráfico */
+}
+
+.PieChart {
+  margin: 0;
+}
+
+.tasks-table-container {
+  overflow-x: auto;  /* Permite desplazamiento horizontal */
+  max-width: 100%;    /* Evita que el contenedor se desborde fuera de la pantalla */
+}
+
+.tasks-table {
+  min-width: 600px;  /* Ancho mínimo para que se haga necesario el desplazamiento */
+  width: 100%;       /* Ajusta el ancho de la tabla */
+  border-collapse: collapse;
+}
+
+.tasks-table th, .tasks-table td {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.tasks-table th {
+  background-color: #f4f4f4;
+}

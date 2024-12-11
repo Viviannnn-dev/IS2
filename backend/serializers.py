@@ -43,7 +43,9 @@ class CardSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'created_at', 'due_date', 'owner', 'label', 'list']
 
 class TaskSerializer(serializers.ModelSerializer):
+    owner_username = serializers.CharField(source='card.owner.username', read_only=True)
+    list_name = serializers.CharField(source='card.list.name', read_only=True)
+
     class Meta:
         model = Task
-        fields = ['id', 'name', 'description', 'status', 'alert', 'due_date', 'card']
-
+        fields = ['id', 'name', 'description', 'status', 'alert', 'due_date', 'card', 'owner_username', 'list_name']
