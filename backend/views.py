@@ -351,6 +351,12 @@ def create_task(request):
 @permission_classes([AllowAny])  
 def update_workspace(request, workspace_id):
     workspace = get_object_or_404(Workspace, id=workspace_id)
+    owner = workspace.owner
+    users = request.data.get('users', [])
+
+    if owner.id not in users:
+        users.append(owner.id)
+
     serializer = WorkspaceSerializer(workspace, data=request.data, partial=True)  # partial=True permite actualizaciones parciales
     if serializer.is_valid():
         serializer.save()
